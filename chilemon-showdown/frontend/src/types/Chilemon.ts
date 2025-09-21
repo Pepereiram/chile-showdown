@@ -1,6 +1,6 @@
 interface Ability {
     name: string;
-    description: string;
+    is_hidden: boolean;
     slot: number;
 }
 
