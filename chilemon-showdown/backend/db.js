@@ -7,8 +7,6 @@ module.exports = () => ({
   chilemon: load("chilemon.json"),
   users: load("users.json"),
   teams: load("teams.json"),
-  teamPokemon: load("teamPokemon.json"), // relación N..M con orden
-  pokemon,
+  teamChilemon: load("teamChilemon.json"),
   moves: load("moves.json"),
-  abilities: load("abilities.json")
 });
