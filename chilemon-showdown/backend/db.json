@@ -1,9 +1,0 @@
-{
-  "users": [
-    { "id": 1, "username": "gustavito", "password": "1234" },
-    { "id": 2, "username": "pepito", "password": "abcd" }
-  ],
-  "teams": [
-    { "id": 1, "userId": 1, "pokemons": ["Pikachu", "Charmander", "Bulbasaur"] }
-  ]
-}
