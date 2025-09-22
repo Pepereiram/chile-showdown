@@ -1,0 +1,85 @@
+/* =============================
+   TeamBuilder.css (create this file)
+   ============================= */
+:root {
+  --border: #e5e7eb;
+  --panel: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --muted-2: #9ca3af;
+  --bg-soft: #f9fafb;
+  --blue: #2563eb;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+  --sky-500: #0ea5e9;
+  --sky-600: #0284c7;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+}
+
+/* App layout */
+.app { min-height: 100vh; background: #fff; color: var(--text); }
+.header { max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; align-items: center; gap: .5rem; }
+.header__home { display: inline-flex; align-items: center; gap: .25rem; color: #4b5563; }
+.header__home:hover { color: #111827; }
+.header__title { flex: 1; text-align: center; font-weight: 700; font-size: 1.5rem; }
+.header__spacer { width: 64px; }
+
+.content { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem 2.5rem; display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; }
+
+/* Left panel */
+.leftPanel { background: var(--panel); border: 1px solid var(--border); border-radius: 1rem; padding: .75rem; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.leftPanel__title { padding: .25rem .5rem; font-weight: 600; }
+.leftPanel__list { display: flex; flex-direction: column; gap: .75rem; }
+.teamItem { border: 1px solid var(--border); border-radius: .75rem; overflow: hidden; }
+.teamButton { width: 100%; display: flex; align-items: center; gap: .5rem; padding: .5rem .75rem; text-align: left; background: #f9fafb; }
+.teamButton:hover { background: #f3f4f6; }
+.teamButton--active { background: #2563eb; color: #fff; }
+.teamButton__index { width: 1.5rem; text-align: right; font-size: .75rem; font-weight: 600; }
+.teamButton__avatars { display: flex; align-items: center; gap: .25rem; flex: 1; }
+.teamButton__avatar { height: 24px; width: 24px; border-radius: 9999px; object-fit: cover; border: 1px solid #d1d5db; }
+.teamButton--active .teamButton__avatar { border-color: rgba(255,255,255,.7); }
+.teamButton__add { margin-left: auto; height: 24px; width: 24px; border-radius: 9999px; border: 1px solid #d1d5db; display: inline-flex; align-items: center; justify-content: center; }
+.teamButton__add--active { border-color: rgba(255,255,255,.6); }
+.pager { display: flex; justify-content: center; gap: .5rem; padding-top: .5rem; }
+.pager span { height: 6px; width: 6px; border-radius: 9999px; background: rgba(0,0,0,.4); }
+
+/* Right panel */
+.rightPanel { background: var(--panel); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.rightPanel__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.rightPanel__teamName { font-weight: 700; font-size: 1.125rem; }
+.rightPanel__actions { display: flex; align-items: center; gap: .5rem; }
+
+.input { height: 36px; width: 18rem; border-radius: .75rem; border: 1px solid #d1d5db; background: #f9fafb; padding: 0 .75rem; font-size: .875rem; }
+.input:focus { outline: none; box-shadow: 0 0 0 2px rgba(37,99,235,.25); }
+
+.playersGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+
+/* Cards */
+.playerCard { position: relative; border: 1px solid var(--border); background: #fff; border-radius: 1rem; padding: .75rem; display: flex; flex-direction: column; align-items: center; gap: .5rem; min-width: 170px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.playerCard__remove { position: absolute; right: .5rem; top: .5rem; height: 24px; width: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: .375rem; background: var(--red-500); color: #fff; }
+.playerCard__remove:hover { background: var(--red-600); }
+.playerCard__avatar { height: 96px; width: 96px; border-radius: .75rem; overflow: hidden; border: 1px solid var(--border); background: #f3f4f6; }
+.playerCard__avatar img { height: 100%; width: 100%; object-fit: cover; display: block; }
+.playerCard__name { font-size: .75rem; color: #1f2937; margin-top: -2px; }
+
+.addCard { border: 1px dashed #d1d5db; background: #f9fafb; border-radius: 1rem; min-width: 170px; height: 178px; padding: .75rem; display: flex; align-items: center; justify-content: center; }
+.addCard:hover { background: #f3f4f6; }
+.addCard__ring { height: 80px; width: 80px; border-radius: 9999px; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; }
+
+.more { margin-top: 2rem; display: flex; justify-content: center; }
+.more__btn { display: inline-flex; align-items: center; gap: .25rem; color: var(--muted); font-size: .875rem; }
+
+/* Buttons */
+.btn { border-radius: .5rem; padding: .375rem .75rem; font-size: .75rem; font-weight: 500; border: none; }
+.btn--primary { background: var(--blue-600); color: #fff; }
+.btn--primary:hover { background: var(--blue-700); }
+.btn--sky { background: var(--sky-500); color: #fff; }
+.btn--sky:hover { background: var(--sky-600); }
+.btn--icon { height: 36px; width: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+.btn--xs { padding: .25rem .75rem; }
+
+/* Icon helpers */
+.icon-14 { width: 14px; height: 14px; }
+.icon-16 { width: 16px; height: 16px; }
+.icon-40 { width: 40px; height: 40px; }
