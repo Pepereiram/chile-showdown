@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "teamId": 1,
+        "pokemonId": 150,
+        "position": 1,
+        "nickname": "Huevito Rey",
+        "moves": [1, 2, 3, 4]
+    },
+    {
+        "id": 2,
+        "teamId": 1,
+        "pokemonId": 1,
+        "position": 2,
+        "nickname": "Mysterion",
+        "moves": [5, 6, 7, 8]
+    }
+]
