@@ -1,6 +1,18 @@
 # chile-showdown
 Proyecto para CC5003 - Aplicaciones Web Reactivas. Primavera 2025.
 
+# Instalar dependencias
+
+Antes de correr cualquier parte de la acplicación, es necesario instalar las dependencias tanto de la raíz del proyecto como las de frontend y backend. Para ello, estando en `chilemon-showdown`, hacer lo siguiente:
+```bash
+npm install
+cd frontend
+npm install
+cd ..
+cd backend
+npm install
+```
+
 # Correr Frontend y Backend al mismo tiempo
 
 1. En la raíz del proyecto chilemon-showdown hacer
