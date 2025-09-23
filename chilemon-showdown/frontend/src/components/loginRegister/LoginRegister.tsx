@@ -57,6 +57,9 @@ const LoginRegister: React.FC = ({}) => {
     };
   return (
     <div className='container'>
+    <h1 className="title">
+      Bienvenido/as a Chilemon Showdown!!
+    </h1>
       <div className="header">
         <div className="text">{login}</div>
         <div className="underline"></div>
