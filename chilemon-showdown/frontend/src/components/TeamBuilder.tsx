@@ -4,7 +4,7 @@ import "./TeamBuilder.css"; // <-- extracted styles
 import eggkingImg from "../assets/HuevitoRey.jpeg";
 import corxeaImg from "../assets/corxea.jpg";
 import misterionImg from "../assets/misterion.jpg";
-import papiMickeyImg from "../assets/papiMickey.jpg";
+import papiMickeyImg from "../assets/papimickey.jpg";
 
 
 
