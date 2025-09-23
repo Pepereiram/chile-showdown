@@ -24,7 +24,7 @@ const LoginRegister: React.FC = ({}) => {
       if (user) {
         // Aquí podrías guardar el usuario en el estado global o redirigir
         setError("");
-        navigate("/team-builder")
+        navigate("/home")
       } else {
         setError("Usuario o contraseña incorrectos.");
       }
