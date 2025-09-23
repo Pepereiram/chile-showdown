@@ -1,5 +1,6 @@
 import React, {useState} from "react"; 
 import type { LoginData } from "../../types/Login";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './LoginRegister.css';
 
@@ -9,6 +10,7 @@ const LoginRegister: React.FC = ({}) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate()
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +24,7 @@ const LoginRegister: React.FC = ({}) => {
       if (user) {
         // Aquí podrías guardar el usuario en el estado global o redirigir
         setError("");
-        alert("¡Login exitoso!");
+        navigate("/team-builder")
       } else {
         setError("Usuario o contraseña incorrectos.");
       }
@@ -43,6 +45,7 @@ const LoginRegister: React.FC = ({}) => {
             setError("El usuario ya existe.");
             return;
         }
+
         await axios.post("http://localhost:3001/users", { username, password });
         alert("¡Registro exitoso!");
         setLogin("Login");
