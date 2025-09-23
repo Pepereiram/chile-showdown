@@ -50,8 +50,8 @@
 .rightPanel__teamName { font-weight: 700; font-size: 1.125rem; }
 .rightPanel__actions { display: flex; align-items: center; gap: .5rem; }
 
-.input { height: 36px; width: 18rem; border-radius: .75rem; border: 1px solid #d1d5db; background: #f9fafb; padding: 0 .75rem; font-size: .875rem; }
-.input:focus { outline: none; box-shadow: 0 0 0 2px rgba(37,99,235,.25); }
+.input-teamBuilder { height: 36px; width: 18rem; border-radius: .75rem; border: 1px solid #d1d5db; background: #f9fafb; padding: 0 .75rem; font-size: .875rem; }
+.input-teamBuilder:focus { outline: none; box-shadow: 0 0 0 2px rgba(37,99,235,.25); }
 
 .playersGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
 

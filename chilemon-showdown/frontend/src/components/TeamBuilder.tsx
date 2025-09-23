@@ -112,7 +112,7 @@ export default function TeamBuilder() {
             <div className="rightPanel__teamName">{activeTeam.name}</div>
             <div className="rightPanel__actions">
               <input
-                className="input"
+                className="input-teamBuilder"
                 placeholder="Ponle un nombre a tu equipo..."
                 value={activeTeam.name}
                 onChange={(e) => updateTeam(activeTeam.id, (t) => ({ ...t, name: e.target.value }))}
