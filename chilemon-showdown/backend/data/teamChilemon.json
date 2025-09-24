@@ -14,5 +14,117 @@
         "position": 2,
         "nickname": "Mysterion",
         "moves": [5, 6, 7, 8]
+    },
+    {
+        "id": 7,
+        "teamId": 1,
+        "pokemonId": 25,
+        "position": 3,
+        "nickname": "Chispa",
+        "moves": [9, 10, 11, 12]
+    },
+    {
+        "id": 8,
+        "teamId": 1,
+        "pokemonId": 6,
+        "position": 4,
+        "nickname": "Inferno",
+        "moves": [13, 14, 15, 16]
+    },
+    {
+        "id": 3,
+        "teamId": 2,
+        "pokemonId": 1,
+        "position": 1,
+        "nickname": "Mysterion",
+        "moves": [5, 6, 7, 8]
+    },
+    {
+        "id": 4,
+        "teamId": 2,
+        "pokemonId": 143,
+        "position": 2,
+        "nickname": "Vardoc1",
+        "moves": [17, 18, 19, 20]
+    },
+    {
+        "id": 5,
+        "teamId": 2,
+        "pokemonId": 94,
+        "position": 3,
+        "nickname": "Corxea",
+        "moves": [21, 22, 23, 24]
+    },
+    {
+        "id": 9,
+        "teamId": 2,
+        "pokemonId": 130,
+        "position": 4,
+        "nickname": "Leviatán",
+        "moves": [25, 26, 27, 28]
+    },
+    {
+        "id": 6,
+        "teamId": 3,
+        "pokemonId": 1,
+        "position": 1,
+        "nickname": "Mysterion",
+        "moves": [5, 6, 7, 8]
+    },
+    {
+        "id": 10,
+        "teamId": 3,
+        "pokemonId": 131,
+        "position": 2,
+        "nickname": "Aurora",
+        "moves": [29, 30, 31, 32]
+    },
+    {
+        "id": 11,
+        "teamId": 3,
+        "pokemonId": 149,
+        "position": 3,
+        "nickname": "Draco",
+        "moves": [33, 34, 35, 36]
+    },
+    {
+        "id": 12,
+        "teamId": 3,
+        "pokemonId": 3,
+        "position": 4,
+        "nickname": "Florencio",
+        "moves": [37, 38, 39, 40]
+    },
+    {
+        "id": 13,
+        "teamId": 4,
+        "pokemonId": 4,
+        "position": 1,
+        "nickname": "Chispín",
+        "moves": [41, 42, 43, 44]
+    },
+    {
+        "id": 14,
+        "teamId": 4,
+        "pokemonId": 7,
+        "position": 2,
+        "nickname": "Aguamán",
+        "moves": [45, 46, 47, 48]
+    },
+    {
+        "id": 15,
+        "teamId": 4,
+        "pokemonId": 25,
+        "position": 3,
+        "nickname": "Voltix",
+        "moves": [49, 50, 51, 52]
+    },
+    {
+        "id": 16,
+        "teamId": 4,
+        "pokemonId": 65,
+        "position": 4,
+        "nickname": "PsiKing",
+        "moves": [53, 54, 55, 56]
     }
 ]
