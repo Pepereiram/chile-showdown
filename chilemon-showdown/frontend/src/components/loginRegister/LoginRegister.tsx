@@ -23,6 +23,7 @@ const LoginRegister: React.FC = ({}) => {
       const user = data.find(u => u.username === username && u.password === password);
       if (user) {
         // Aquí podrías guardar el usuario en el estado global o redirigir
+        localStorage.setItem("user", JSON.stringify(user));
         setError("");
         navigate("/home")
       } else {

@@ -12,7 +12,9 @@ type TeamView = {
 
 
 export default function Home() {
-  const user = { id: 1, username: "gustavito", password: "1234" }; // mock user para test
+  const storedUser = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+  const user: { id: number; username: string; password: string } | null =
+    storedUser ? JSON.parse(storedUser) : null; // mock user para test
   // este debería ser un usuario autenticado pero setiene que implementar auth primero
 
   // Definimos los estados
@@ -27,7 +29,7 @@ export default function Home() {
         // extraer los equipos del usuario autenticado
         const teamsRes = await axios.get<Team[]>(
           `http://localhost:3001/teams`,
-          { params: { userId: user.id } }
+          { params: { userId: user?.id } }
         );
 
         const teamsCargados = teamsRes.data;
@@ -64,7 +66,7 @@ export default function Home() {
     }
 
     load();
-  }, [user.id]);
+  }, [user?.id]);
   console.log(teams);
   return (
     <div className="page">
