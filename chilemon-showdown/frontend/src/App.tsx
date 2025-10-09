@@ -1,9 +1,9 @@
 ﻿//import { useState } from 'react'
 import './App.css'
 
-import LoginRegister from './components/loginRegister/LoginRegister';
+import LoginRegister from './pages/loginRegister/LoginRegister';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import TeamBuilder from './components/TeamBuilder';
+import TeamBuilder from './pages/teamBuilder/TeamBuilder';
 import Home from './pages/home/Home';
 const App: React.FC = () => {
   return (

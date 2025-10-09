@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Plus, X, Save, Home, Ellipsis } from "lucide-react";
 import "./TeamBuilder.css"; // <-- extracted styles
-import eggkingImg from "../assets/HuevitoRey.jpeg";
-import corxeaImg from "../assets/corxea.jpg";
-import misterionImg from "../assets/misterion.jpg";
-import papiMickeyImg from "../assets/papimickey.jpg";
+import eggkingImg from "../../assets/HuevitoRey.jpeg";
+import corxeaImg from "../../assets/corxea.jpg";
+import misterionImg from "../../assets/misterion.jpg";
+import papiMickeyImg from "../../assets/papimickey.jpg";
 
 
 

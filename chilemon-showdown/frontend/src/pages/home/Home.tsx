@@ -3,7 +3,7 @@ import axios from "axios";
 import "./Home.css";
 import type { Team } from "../../types/Team";
 import type { TeamChilemon } from "../../types/TeamChilemon";
-import HomeButton from "../../components/HomeButton";
+import ButtonLink from "../../components/ButtonLink";
 
 type TeamView = {
   id: number;
@@ -76,8 +76,8 @@ export default function Home() {
             <h1 className="title">Chilemon Showdown</h1>
 
             <div className="stack">
-              <HomeButton text="Random Battle" onClickFunction={() => alert("Redirige a una batalla aleatoria")} />
-              <HomeButton text="Team Builder" onClickFunction={() => alert("Redirige al Team Builder")} />
+              <ButtonLink route="random-battle" text="Random Battle" />
+              <ButtonLink route="team-builder" text="Team Builder" />
 
             {selectedTeam && (
               <>
@@ -135,9 +135,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <HomeButton
-                  text="Battle with Selected Team"
-                  onClickFunction={() => alert(`Inicia una nueva batalla con el team ${selectedTeam.id}`)}
+                <ButtonLink
+                  route={`battle/${selectedTeam.id}`}
+                  text="Battle with Selected Team"                
                 />
               </>
             )}
@@ -146,9 +146,9 @@ export default function Home() {
               <div className="label">No tienes equipos todavía.</div>
             )}
 
-            <HomeButton
+            <ButtonLink
+              route="edit-profile"
               text="Edit Profile"
-              onClickFunction={() => alert("Redirige al perfil del usuario")}
             />
           </div>
         </main>
