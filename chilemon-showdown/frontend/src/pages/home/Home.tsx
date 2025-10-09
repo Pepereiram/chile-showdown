@@ -75,7 +75,7 @@ export default function Home() {
           <main className="center">
             <h1 className="title">Chilemon Showdown</h1>
 
-            <div className="stack">
+            <div className="flex flex-col gap-2">
               <ButtonLink route="random-battle" text="Random Battle" />
               <ButtonLink route="team-builder" text="Team Builder" />
 

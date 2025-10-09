@@ -9,7 +9,7 @@ interface ButtonLinkProps {
 const ButtonLink = ({ route, text}: ButtonLinkProps) => {
     const navigate = useNavigate();
 
-    const basicStyle = 'bg-red-500 text-black';
+    const basicStyle = "bg-blue-500 text-white font-medium hover:bg-blue-600 active:bg-blue-700 rounded-lg px-6 py-2 transition";
  
     return (
         <button
