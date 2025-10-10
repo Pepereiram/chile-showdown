@@ -4,7 +4,7 @@ import "./Home.css";
 import type { Team } from "../../types/Team";
 import type { TeamChilemon } from "../../types/TeamChilemon";
 import ButtonLink from "../../components/ButtonLink";
-
+import TeamSelector from "../../components/TeamSelector";
 type TeamView = {
   id: number;
   name: string;
@@ -69,6 +69,7 @@ export default function Home() {
     load();
   }, [user?.id]);
   console.log(teams);
+
   return (
     <div className="page">
         <div className="screen">
@@ -78,70 +79,11 @@ export default function Home() {
             <div className="flex flex-col gap-2">
               <ButtonLink route="random-battle" text="Random Battle" />
               <ButtonLink route="team-builder" text="Team Builder" />
-
-            {selectedTeam && (
-              <>
-                <div className="teamRow">
-                  <span className="label">Selected Team:</span>
-                  <div className="teamPicker">
-                    <span className="teamIndex">{selectedTeam.name}</span>
-                    <div className="avatars">
-                      {selectedTeam.members.map((m, i) => (
-                        <div key={i} className="avatar" aria-label={`Member ${i + 1}`}>
-                          {m}
-                        </div>
-                      ))}
-                    </div>
-                    <button
-                      className="chev"
-                      aria-label="Select team"
-                      onClick={() => setOpen((v) => !v)}
-                    >
-                      <svg
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M7 10l5 5 5-5"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-
-                    {open && (
-                      <ul className="dropdown" role="listbox">
-                        {teams.map((t) => (
-                          <li
-                            key={t.id}
-                            role="option"
-                            aria-selected={t.id === selectedTeam.id}
-                            className={"option" + (t.id === selectedTeam.id ? " selected" : "")}
-                            onClick={() => {
-                              setSelectedTeam(t);
-                              setOpen(false);
-                            }}
-                          >
-                            {t.name} Team
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-
-                <ButtonLink
-                  route={`battle/${selectedTeam.id}`}
-                  text="Battle with Selected Team"                
-                />
-              </>
-            )}
-
+              <TeamSelector />
+              <ButtonLink
+                route={`battle/`}
+                text="Battle with Selected Team"                
+              />
             {!selectedTeam && (
               <div className="label">No tienes equipos todavía.</div>
             )}
