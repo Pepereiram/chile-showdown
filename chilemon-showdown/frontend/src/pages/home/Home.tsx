@@ -89,7 +89,7 @@ export default function Home() {
             )}
 
             <ButtonLink
-              route="edit-profile"
+              route="profile"
               text="Edit Profile"
             />
           </div>
