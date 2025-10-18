@@ -4,5 +4,7 @@ export interface TeamChilemon {
     pokemonId: number;
     position: number;
     nickname: string;
+    level: number;
     moves: number[];
+    effort: number[];
 };

@@ -7,7 +7,7 @@ interface Ability {
 interface Stat {
     name: string;
     base_value: number;
-    effort: number;
+    // effort: number; Movi effort a TeamChilemon
 }
 
 interface Type {
