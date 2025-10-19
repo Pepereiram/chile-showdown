@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './LoginRegister.css';
 
+type LoginResponse = { username: string };
 
 const LoginRegister: React.FC = ({}) => {
     const [login, setLogin] = useState("Login");
@@ -15,47 +16,56 @@ const LoginRegister: React.FC = ({}) => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+
     try {
-      const { data } = await axios.get<LoginData[]>(
-        "http://localhost:3001/users",
-        { params: { username, password } }
+      const res = await axios.post<LoginResponse>(
+        "http://localhost:3001/api/login",
+        { username, password },
+        {
+          withCredentials: true,
+        }
       );
-      const user = data.find(u => u.username === username && u.password === password);
-      if (user) {
-        // Aquí podrías guardar el usuario en el estado global o redirigir
-        localStorage.setItem("user", JSON.stringify(user));
-        setError("");
-        navigate("/home")
-      } else {
-        setError("Usuario o contraseña incorrectos.");
+      console.log("Respuesta:", res);
+      const csrf = res.headers["x-csrf-token"];
+      if (csrf) {
+        localStorage.setItem("csrf", csrf);
       }
-    } catch {
-      setError("Error de conexión.");
+      localStorage.setItem("user", JSON.stringify({ username: res.data.username }));
+      setError("");
+      navigate("/home");
+    } catch (err: any) {
+      const msg =
+        err?.response?.status === 401
+          ? "Usuario o contraseña incorrectos."
+          : "Error de conexión.";
+      setError(msg);
+    } finally {
+      setUsername("");
+      setPassword("");
     }
-    setUsername("");
-    setPassword("");
   };
 
-    const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError("");
-        try {
-        const { data } = await axios.get<LoginData[]>("http://localhost:3001/users", { params: { username } });
-        const exists = data.some(u => u.username === username);
-        if (exists) {
-            setError("El usuario ya existe.");
-            return;
-        }
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    try {
+      const { data } = await axios.get<LoginData[]>("http://localhost:3001/api/users", { params: { username } });
+      console.log("Register users: ", data);
+      const exists = data.some(u => u.username === username);
+      if (exists) {
+          setError("El usuario ya existe.");
+          return;
+      }
 
-        await axios.post("http://localhost:3001/users", { username, password });
-        alert("¡Registro exitoso!");
-        setLogin("Login");
-        } catch {
-        setError("Error de conexión.");
-        }
-        setUsername("");
-        setPassword("");
-    };
+      await axios.post("http://localhost:3001/api/users", { username, password });
+      alert("¡Registro exitoso!");
+      setLogin("Login");
+    } catch {
+      setError("Error de conexión.");
+      }
+      setUsername("");
+      setPassword("");
+  };
   return (
     <div className='container'>
     <h1 className="title">

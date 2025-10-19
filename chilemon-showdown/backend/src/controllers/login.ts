@@ -8,41 +8,45 @@ import { authenticate } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-router.post("/", async (request, response) => {
-  const { username, password } = request.body;
+/**
+ * User trata de logearse
+ */
 
-  const user = await User.findOne({ username });
-  if (!user) {
-    return response.status(401).json({ error: "invalid username or password" });
-  }
+router.post("/", async (req, res) => {
+  const { username, password } = req.body;
 
-  const passwordCorrect = await bcrypt.compare(password, user.password);
-  if (!passwordCorrect) {
-    return response.status(401).json({ error: "invalid username or password" });
-  }
+  // 👇 como password tiene select:false, hay que incluirlo
+  const user = await User.findOne({ username }).select("+password");
+  if (!user) return res.status(401).json({ error: "invalid username or password" });
 
-  const userForToken = {
-    username: user.username,
-    csrf: randomUUID(),
-    id: user._id.toString(),
-  };
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) return res.status(401).json({ error: "invalid username or password" });
 
+  const userForToken = { username: user.username, csrf: randomUUID(), id: user._id.toString() };
   const token = jwt.sign(userForToken, JWT_SECRET, { expiresIn: 60 * 60 });
 
-  response.setHeader("X-CSRF-Token", userForToken.csrf);
-  response.cookie("token", token, {
+  res.setHeader("X-CSRF-Token", userForToken.csrf);
+  res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
   });
 
-  return response.status(200).send({ username: user.username });
+  return res.status(200).send({ username: user.username });
 });
 
+
+/**
+ * Obtener datos del usuario logeado
+ */
 router.get("/me", authenticate, async (request, response) => {
   const user = await User.findById((request as any).userId);
   return response.status(200).json(user);
 });
 
+/**
+ * Logout user
+ */
 router.post("/logout", (_request, response) => {
   response.clearCookie("token");
   return response.status(200).send({ message: "Logged out successfully" });
