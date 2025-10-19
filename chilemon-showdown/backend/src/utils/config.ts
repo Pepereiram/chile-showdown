@@ -1,15 +1,18 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-const PORT = process.env.PORT;
-const HOST = process.env.HOST || "localhost";
+export const ENV = process.env.NODE_ENV ?? "development";
 
-const MONGODB_URI =
-  process.env.NODE_ENV === "test"
-    ? process.env.TEST_MONGODB_URI
-    : process.env.MONGODB_URI;
+export const PORT = Number(process.env.PORT ?? 3001);
+export const HOST = process.env.HOST ?? "localhost";
 
-const JWT_SECRET = process.env.JWT_SECRET || "my_secret"
-const MONGODB_DBNAME = process.env.NODE_ENV === "test" ? process.env.TEST_MONGODB_DBNAME : process.env.MONGODB_DBNAME || "chilemondb"
+export const JWT_SECRET = process.env.JWT_SECRET ?? "my_secret";
 
-export default { PORT, MONGODB_URI, HOST, JWT_SECRET, MONGODB_DBNAME };
+// Always provide safe fallbacks so types are string, not string | undefined
+export const MONGODB_URI =
+  process.env.MONGODB_URI ?? "mongodb://localhost:27017";
+
+export const MONGODB_DBNAME =
+  ENV === "test"
+    ? (process.env.TEST_MONGODB_DBNAME ?? "chilemondb_test")
+    : (process.env.MONGODB_DBNAME ?? "chilemondb");
