@@ -1,53 +1,47 @@
-import { NextFunction, Request, Response } from "express";
+import type { RequestHandler, ErrorRequestHandler } from "express";
 import logger from "../utils/logger";
 
-const requestLogger = (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  logger.info("Method:", request.method);
-  logger.info("Path:  ", request.path);
-  logger.info("Body:  ", request.body);
+export const requestLogger: RequestHandler = (req, _res, next) => {
+  logger.info("Method:", req.method);
+  logger.info("Path:  ", req.path);
+  if (req.body && Object.keys(req.body).length) {
+    logger.info("Body:  ", req.body);
+  }
   logger.info("---");
   next();
 };
 
-const unknownEndpoint = (
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  response.status(404).send({ error: "unknown endpoint" });
+export const unknownEndpoint: RequestHandler = (_req, res) => {
+  res.status(404).json({ error: "unknown endpoint" });
 };
 
-const errorHandler = (
-  error: { name: string; message: string },
-  request: Request,
-  response: Response,
-  next: NextFunction
-) => {
-  logger.error(error.message);
+export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+  const name = (err as any)?.name as string | undefined;
+  const message = (err as any)?.message as string | undefined;
 
-  logger.error(error.name);
-  if (error.name === "CastError") {
-    response.status(400).send({ error: "malformatted id" });
-  } else if (error.name === "ValidationError") {
-    response.status(400).json({ error: error.message });
-  } else if (
-    error.name === "MongoServerError" &&
-    error.message.includes("E11000 duplicate key error")
-  ) {
-    response
-      .status(400)
-      .json({ error: "expected `username` to be unique" });
-  } else if (error.name === "JsonWebTokenError") {
-    response.status(401).json({ error: "invalid token" });
-  } else if (error.name === "TokenExpiredError") {
-    response.status(401).json({ error: "invalid token" });
+  if (message) logger.error(message);
+  if (name) logger.error(name);
+
+  if (name === "CastError") {
+    return res.status(400).json({ error: "malformatted id" });
   }
 
-  next(error);
-};
+  if (name === "ValidationError") {
+    return res.status(400).json({ error: message ?? "validation error" });
+  }
 
-export default { requestLogger, unknownEndpoint, errorHandler };
+  if (name === "MongoServerError" && typeof message === "string" && message.includes("E11000 duplicate key error")) {
+    return res.status(400).json({ error: "expected `username` to be unique" });
+  }
+
+  if (name === "JsonWebTokenError") {
+    return res.status(401).json({ error: "invalid token" });
+  }
+
+  if (name === "TokenExpiredError") {
+    return res.status(401).json({ error: "token expired" });
+  }
+
+  // Fallback
+  return res.status(500).json({ error: "Internal Server Error" });
+};
