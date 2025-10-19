@@ -71,30 +71,27 @@ export default function Home() {
   console.log(teams);
 
   return (
-    <div className="page">
-        <div className="screen">
-          <main className="center">
-            <h1 className="title">Chilemon Showdown</h1>
+    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 p-4">
+      <main className="text-center flex flex-col gap-3">
+        <h1 className="text-4xl font-bold text-blue-600 mb-4">
+          Chilemon Showdown
+        </h1>
 
-            <div className="flex flex-col gap-2">
-              <ButtonLink route="random-battle" text="Random Battle" />
-              <ButtonLink route="team-builder" text="Team Builder" />
-              <TeamSelector />
-              <ButtonLink
-                route={`battle/`}
-                text="Battle with Selected Team"                
-              />
-            {!selectedTeam && (
-              <div className="label">No tienes equipos todavía.</div>
-            )}
+        <div className="flex flex-col gap-2">
+          <ButtonLink route="random-battle" text="Random Battle" />
+          <ButtonLink route="team-builder" text="Team Builder" />
+          <TeamSelector />
+          <ButtonLink route="battle/" text="Battle with Selected Team" />
 
-            <ButtonLink
-              route="profile"
-              text="Edit Profile"
-            />
-          </div>
-        </main>
-      </div>
+          {!selectedTeam && (
+            <div className="text-gray-500 text-sm mt-2">
+              No tienes equipos todavía.
+            </div>
+          )}
+
+          <ButtonLink route="profile" text="Edit Profile" />
+        </div>
+      </main>
     </div>
   );
 }
