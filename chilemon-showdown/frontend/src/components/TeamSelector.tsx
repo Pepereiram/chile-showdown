@@ -1,66 +1,39 @@
 import { CiCirclePlus } from "react-icons/ci";
 
-
-
-
-function ImageCircle({ src, alt }: { src: string; alt: string }) {
-    return (
-        <div className="relative w-16 h-16">
-            <img
-                src={src}
-                alt={alt}
-                className="rounded-full object-cover w-full h-full"
-            />
-        </div>
-    );
-}
-
-
-interface OptionImgProps {
-    text: string;
-}
-function OptionImg({ text }: OptionImgProps) {
-    const team = [
-        {dir: "./assets/corxea.jpg"},
-        {dir: "./assets/HuevitoRey.jpeg"},
-        {dir: "./assets/misterion.jpg"},
-        {dir: "./assets/papimickey.jpg"},
-    ];
-    return (
-        <option>
-            {text}
-        </option>
-    );
-}
-
 interface TeamSelectorProps {
-  teams: Array<{id: number, name: string, members: string[]}>;
+  teams: Array<{ id: string; name: string; members: string[] }>;
+  selectedTeamId: string | null;
+  onChange: (id: string) => void;
 }
 
-function TeamSelector () {
-    const teams = ["Equipo 1", "Equipo 2", "Equipo 3"]; // Debe mostrar al team
-    const hasTeam = true;
-    return (
-    <div className=""
-        >
-            <h3>Selecciona un equipo</h3>
-            { !hasTeam && <div className="flex items-center justify-center">
-                <a href="/team-builder">
-                    <CiCirclePlus
-                    className="icon-24 self-center size-8 hover:scale-110 transition"/>
-                </a>
-            </div>}
-            { hasTeam && 
-            <select>
-                {teams.map((team, index) => {
-                    return (
-                        <OptionImg text={team} />
-                    );
-                })}
-            </select>}
-        </div>
-    );
-};
+function TeamSelector({ teams, selectedTeamId, onChange }: TeamSelectorProps) {
+  const hasTeams = teams.length > 0;
 
+  return (
+    <div>
+      <h3>Selecciona un equipo</h3>
+      {!hasTeams && (
+        <div className="flex items-center justify-center">
+          <a href="/team-builder" title="Crear equipo">
+            <CiCirclePlus className="icon-24 self-center size-8 hover:scale-110 transition" />
+          </a>
+        </div>
+      )}
+      {hasTeams && (
+        <select
+          value={selectedTeamId ?? ""}
+          onChange={(e) => onChange(e.target.value)}
+          className="border rounded px-3 py-1"
+        >
+          {teams.map((t) => (
+            <option key={t.id} value={t.id}>
+              {t.name}
+            </option>
+          ))}
+        </select>
+      )}
+    </div>
+  );
+}
 
 export default TeamSelector;

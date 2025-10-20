@@ -1,6 +1,6 @@
 export interface TeamChilemon {
-    id: number;
-    teamId: number;
+    id: string;
+    teamId: string;
     pokemonId: number;
     position: number;
     nickname: string;

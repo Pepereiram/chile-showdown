@@ -31,7 +31,6 @@ const TeamBuilder: React.FC = () => {
     loadExistingTeams();
   }, []);
 
-  // helper para auth
   const auth = () => ({
     withCredentials: true,
     headers: { "X-CSRF-Token": localStorage.getItem("csrf") || "" },
@@ -58,13 +57,10 @@ const TeamBuilder: React.FC = () => {
       const user = storedUser ? JSON.parse(storedUser) : null;
 
       if (!user) return;
-
-      // antes: GET http://localhost:3001/teams
       const teamsRes = await axios.get(`http://localhost:3001/api/teams`, auth());
 
       const teamsWithMembers = await Promise.all(
         teamsRes.data.map(async (team: any) => {
-          // antes: GET http://localhost:3001/teamChilemon
           const membersRes = await axios.get(`http://localhost:3001/api/teamChilemon`, {
             params: { teamId: team.id },
             ...auth(),
@@ -136,7 +132,6 @@ const TeamBuilder: React.FC = () => {
     }
 
     try {
-      // antes: DELETE http://localhost:3001/teams/:id
       await axios.delete(`http://localhost:3001/api/teams/${teamId}`, auth());
       setExistingTeams(existingTeams.filter(t => t.id !== teamId));
       if (activeTeamId === teamId) {
@@ -170,14 +165,12 @@ const TeamBuilder: React.FC = () => {
       }
 
       if (activeTeamId) {
-        // antes: PUT http://localhost:3001/teams/:id
         await axios.put(`http://localhost:3001/api/teams/${activeTeamId}`, {
           name: teamName,
           members: selectedPlayers.map(p => p.id)
         }, auth());
         alert("¡Equipo actualizado exitosamente!");
       } else {
-        // antes: POST http://localhost:3001/teams (y enviaba userId)
         await axios.post("http://localhost:3001/api/teams", {
           name: teamName,
           members: selectedPlayers.map(p => p.id)
@@ -192,7 +185,6 @@ const TeamBuilder: React.FC = () => {
     }
   };
 
-  // Create exactly 6 slots for the grid
   const teamSlots = Array(6).fill(null).map((_, index) => 
     selectedPlayers[index] || null
   );
@@ -273,9 +265,9 @@ const TeamBuilder: React.FC = () => {
                   >
                     ×
                   </button>
-                  <button className="slot-edit" title="Edit">
+                  {/* <button className="slot-edit" title="Edit">
                     ✏️
-                  </button>
+                  </button> */}
                 </>
               ) : (
                 <div className="empty-slot">
