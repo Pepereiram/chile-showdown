@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./TeamBuilder.css";
 import type { Chilemon } from "../../types/Chilemon";
-
+import LayoutNavbar from "../../components/LayoutNavbar";
 interface PlayerDisplay {
   id: number;
   name: string;
@@ -188,7 +188,8 @@ const TeamBuilder: React.FC = () => {
     selectedPlayers[index] || null
   );
 
-  return (
+  return (<>
+    <LayoutNavbar />
     <div className="teambuilder-layout">
       <aside className="teams-sidebar">
         <h2 className="sidebar-title">Mis Equipos</h2>
@@ -298,7 +299,7 @@ const TeamBuilder: React.FC = () => {
         </div>
       </aside>
     </div>
-  );
+  </>);
 };
 
 export default TeamBuilder;
