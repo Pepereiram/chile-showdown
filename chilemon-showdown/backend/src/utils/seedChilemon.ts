@@ -6,6 +6,12 @@ import * as path from "path";
 async function seedChilemon() {
   await connectDB();
 
+  const count = await Chilemon.countDocuments();
+  if (count > 0) {
+    console.log("Chilemon data already seeded, skipping.");
+    process.exit(0);
+  }
+
   const chilemonData = JSON.parse(
     fs.readFileSync(path.join(__dirname, "../../data/chilemon.json"), "utf-8")
   );
