@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./TeamBuilder.css";
 import type { Chilemon } from "../../types/Chilemon";
-import LayoutNavbar from "../../components/LayoutNavbar";
+
 interface PlayerDisplay {
   id: number;
   name: string;
@@ -31,6 +31,12 @@ const TeamBuilder: React.FC = () => {
     loadExistingTeams();
   }, []);
 
+  // helper para auth
+  const auth = () => ({
+    withCredentials: true,
+    headers: { "X-CSRF-Token": localStorage.getItem("csrf") || "" },
+  });
+
   const loadAvailableChilemon = async () => {
     try {
       const response = await axios.get<Chilemon[]>("http://localhost:3001/chilemon");
@@ -53,18 +59,19 @@ const TeamBuilder: React.FC = () => {
 
       if (!user) return;
 
-      const teamsRes = await axios.get(`http://localhost:3001/teams`, { 
-        params: { userId: user.id }
-      });
+      // antes: GET http://localhost:3001/teams
+      const teamsRes = await axios.get(`http://localhost:3001/api/teams`, auth());
 
       const teamsWithMembers = await Promise.all(
         teamsRes.data.map(async (team: any) => {
-          const membersRes = await axios.get(`http://localhost:3001/teamChilemon`, {
-            params: { teamId: team.id }
+          // antes: GET http://localhost:3001/teamChilemon
+          const membersRes = await axios.get(`http://localhost:3001/api/teamChilemon`, {
+            params: { teamId: team.id },
+            ...auth(),
           });
-          
+
           const chilemonRes = await axios.get<Chilemon[]>("http://localhost:3001/chilemon");
-          
+
           const members = membersRes.data.map((m: any) => {
             const chilemon = chilemonRes.data.find(c => c.id === m.pokemonId);
             return chilemon ? {
@@ -129,7 +136,8 @@ const TeamBuilder: React.FC = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:3001/teams/${teamId}`);
+      // antes: DELETE http://localhost:3001/teams/:id
+      await axios.delete(`http://localhost:3001/api/teams/${teamId}`, auth());
       setExistingTeams(existingTeams.filter(t => t.id !== teamId));
       if (activeTeamId === teamId) {
         handleNewTeam();
@@ -162,20 +170,21 @@ const TeamBuilder: React.FC = () => {
       }
 
       if (activeTeamId) {
-        await axios.put(`http://localhost:3001/teams/${activeTeamId}`, { //esta ruta no existe aun xd, pero hay q conectarlo a la base 
+        // antes: PUT http://localhost:3001/teams/:id
+        await axios.put(`http://localhost:3001/api/teams/${activeTeamId}`, {
           name: teamName,
           members: selectedPlayers.map(p => p.id)
-        });
+        }, auth());
         alert("¡Equipo actualizado exitosamente!");
       } else {
-        await axios.post("http://localhost:3001/teams", {
-          userId: user.id,
+        // antes: POST http://localhost:3001/teams (y enviaba userId)
+        await axios.post("http://localhost:3001/api/teams", {
           name: teamName,
           members: selectedPlayers.map(p => p.id)
-        });
+        }, auth());
         alert("¡Equipo creado exitosamente!");
       }
-      
+
       setIsCreatingNew(false);
       await loadExistingTeams();
     } catch {
@@ -188,8 +197,7 @@ const TeamBuilder: React.FC = () => {
     selectedPlayers[index] || null
   );
 
-  return (<>
-    <LayoutNavbar />
+  return (
     <div className="teambuilder-layout">
       <aside className="teams-sidebar">
         <h2 className="sidebar-title">Mis Equipos</h2>
@@ -299,7 +307,7 @@ const TeamBuilder: React.FC = () => {
         </div>
       </aside>
     </div>
-  </>);
+  );
 };
 
 export default TeamBuilder;
