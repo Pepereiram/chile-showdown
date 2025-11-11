@@ -15,6 +15,7 @@ export function canSwitchTo(player: IPlayer, toIndex: number) {
   return st && st.currentHP > 0 && toIndex !== player.activeIndex;
 }
 
+// Esta es para inicializar el estado de la party
 export function getStateOrThrow(player: IPlayer, idx: number): IBattleChilemonState {
   const st = player.partyState[idx];
   if (!st) throw new Error(`partyState[${idx}] no inicializado`);
