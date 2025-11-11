@@ -74,7 +74,7 @@ export function calcStat(base: number, ev: number, level: number, isHP = false):
 export async function initializePartyState(team: ITeamChilemon[]) {
   const states: IBattleChilemonState[] = [];
   for (const [i, slot] of team.entries()) { // <- sin indefinidos
-    const base = await getSpeciesBaseStats(slot.chilemonId);
+    const base = await getSpeciesBaseStats(slot.chilemonId); 
     const totalHP = calcStat(base.hp, slot.effort[0] ?? 0, slot.level ?? 50, true);
     states.push({
       refTeamIndex: i,
@@ -98,7 +98,7 @@ export async function getStat(player: IPlayer, statName: keyof BaseStats): Promi
     const teamSlot = player.team[st.refTeamIndex];
     if (!teamSlot) throw new Error(`team[${st.refTeamIndex}] no inicializado`);
 
-    const base = await getSpeciesBaseStats(teamSlot.chilemonId);
+    const base = await getSpeciesBaseStats(teamSlot.chilemonId); // Mis más sinceros perdones al curso metodologías de diseño y programación
     const idxMap: Record<keyof BaseStats, number> = { hp: 0, atk: 1, def: 2, spa: 3, spd: 4, spe: 5 };
 
     const evIndex = idxMap[statName];
