@@ -5,7 +5,7 @@ interface StatChange {
     change: number;
 }
 
-interface IMove {
+export interface IMove {
     id: number;
     name: string;
     damage_class: string;
