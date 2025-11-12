@@ -18,9 +18,9 @@ export class BattleEngine {
     // Inicializa el estado de batalla para cada jugador
     async initializeBattle(battle: IBattle) {
         for (const p of battle.players) {
-        p.partyState = await battleHelpers.initializePartyState(p.team); // ← usa especie
-        p.activeIndex = 0;
-        p.mustSwitch = false;
+            p.partyState = await battleHelpers.initializePartyState(p.team); // ← usa especie
+            p.activeIndex = 0;
+            p.mustSwitch = false;
         }
         battle.status = "in-progress";
         battle.turn = 1;
@@ -39,7 +39,6 @@ export class BattleEngine {
     async submitSwitch(battle: IBattle, userId: string, toIndex: number) {
         battle.actions.push({ kind: "switch", userId: asObjectId(userId), toIndex });
         await this.tryResolveTurn(battle)
-        return battle;
     }
 
     // Intenta resolver el turno si ambos jugadores han enviado su acción
@@ -99,7 +98,7 @@ export class BattleEngine {
             return;
         }
 
-        // Aplicar adño
+        // Aplicar daño
         const damage = await battleHelpers.applyDamage(attacker, defender, move);
         defState.currentHP = Math.max(0, defState.currentHP - damage);
         battle.log.push(`${attacker.username} usó ${move.name} e hizo ${damage} de daño.`);

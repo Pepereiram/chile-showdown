@@ -41,7 +41,6 @@ export function isFainted(p: IPlayer): boolean {
   return st.currentHP <= 0;
 }
 
-
 /* =========================================================
    INICIALIZACIÓN DEL PARTY STATE
    ========================================================= */
@@ -171,7 +170,6 @@ export async function applyDamage(attacker: IPlayer,defender: IPlayer, move: IMo
     const defRaw = await getStat(defender, move.damage_class === "physical" ? "def" : "spd");
 
     const level = atkSlot.level ?? 50;
-    const levelDef = defSlot.level ?? 50;
     const power = move.power ?? 0;
 
     // Aplicar cambios en estadisticas (stages), como danza espada, etc.

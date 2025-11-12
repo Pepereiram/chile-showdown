@@ -5,7 +5,12 @@ import { ITeamChilemon } from "./teamChilemon";
 type Stage = -6|-5|-4|-3|-2|-1|0|1|2|3|4|5|6;
 type Status = "none"|"brn"|"psn"|"tox"|"slp"|"par"|"frz";
 
+// Falta manejar lógica de estados: 
+//      startTurn: frozen 
+//      submitMove: paralyzed, burn, asleep
+//      endTurn: toxic, psn, burn damage 
 
+// Falta manejar estados volatiles: confusion, flinch, protect, substitute, leech seed, etc.
 
 // Estado de un Chilemon en batalla
 export interface IBattleChilemonState {
@@ -33,7 +38,7 @@ export interface IPlayer {
     team: ITeamChilemon[];   // datos base (speciesId, level, EVs, moves)
     activeIndex: number;
     partyState: IBattleChilemonState[]; // estado runtime por cada slot del team
-    sideEffects?: {reflect?: number; lightScreen?: number; auroraVeil?: number;
+    sideEffects?: {reflect?: number; lightScreen?: number; auroraVeil?: number; // Faltan movimientos de efecto continuo
     
       // Estos no estan en primera gen igual
       spikes?: number; toxicSpikes?: number; stealthRock?: boolean;
