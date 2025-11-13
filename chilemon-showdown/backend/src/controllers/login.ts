@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
  * Obtener datos del usuario logeado
  */
 router.get("/me", authenticate, async (request, response) => {
-  const user = await User.findById((request as any).userId);
+  const user = await User.findById(request.userId);
   return response.status(200).json(user);
 });
 
