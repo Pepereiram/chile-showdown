@@ -31,8 +31,8 @@ export class BattleEngine {
      * Registrar accion de cada jugador
      */
 
-    async submitMove(battle: IBattle, userId: string, moveId: number, target: number) {
-        battle.actions.push({ kind: "move", userId: asObjectId(userId), moveId, target});
+    async submitMove(battle: IBattle, userId: string, moveId: number) {
+        battle.actions.push({ kind: "move", userId: asObjectId(userId), moveId});
         await this.tryResolveTurn(battle)
     }
 
@@ -136,3 +136,6 @@ export class BattleEngine {
     }
 
 }
+
+const engine = new BattleEngine()
+export default engine;

@@ -85,7 +85,7 @@ const PlayerSchema = new Schema({
 // Acciones de un jugador, elegir movimiento o cambiar de chilemon
 type ActionKind = "move" | "switch";
 interface IActionBase { kind: ActionKind; userId: Types.ObjectId; }
-export interface IActionMove extends IActionBase { kind: "move"; moveId: number; target: number; }
+export interface IActionMove extends IActionBase { kind: "move"; moveId: number; }
 export interface IActionSwitch extends IActionBase { kind: "switch"; toIndex: number; }
 
 export type IAction = IActionMove | IActionSwitch;

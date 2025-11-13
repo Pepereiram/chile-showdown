@@ -6,6 +6,7 @@ import usersRouter from "./controllers/users";
 import loginRouter from "./controllers/login";
 import teambuilderRouter from "./controllers/teambuilder";
 import chilemonRouter from "./controllers/chilemon";
+import battleRouter from "./controllers/battle";
 
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
@@ -41,6 +42,7 @@ app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use("/api", teambuilderRouter);  
 app.use("/chilemon", chilemonRouter);
+app.use("/battles", battleRouter);
 
 // 404
 app.use(unknownEndpoint);
