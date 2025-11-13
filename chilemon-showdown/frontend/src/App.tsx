@@ -7,29 +7,31 @@ import { useAuth } from './hooks/useAuth';
 import TeamBuilder from './pages/teamBuilder/TeamBuilder';
 import Home from './pages/home/Home';
 import Profile from './pages/profile/Profile';
-import LayoutNavbar from './components/LayoutNavbar';
-
+import Navtab from './components/Navtab';
 
 const App: React.FC = () => {
-  const {isLoggedIn} = useAuth();
+  const { isLoggedIn } = useAuth();
+
+  const navTabs = [
+    { label: 'Login', path: '/' },
+    { label: 'Home', path: '/home' },
+    { label: 'Team Builder', path: '/team-builder' },
+    { label: 'Profile', path: '/profile' },
+  ];
 
   return (
     <BrowserRouter>
-      <LayoutNavbar />
       <div className="content mt-16">
-      <Routes>
-        {true ? (<>
-        <Route path="/" element={<LoginRegister />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/team-builder" element={<TeamBuilder />} />
-        <Route path="/profile" element={<Profile />} />
-        </>) : (
-        <Route path="*" element={<LoginRegister />} />
-        )}
-      </Routes>
+        <Navtab tabs={navTabs} />
+        <Routes>
+              <Route path="/" element={<LoginRegister />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/team-builder" element={<TeamBuilder />} />
+              <Route path="/profile" element={<Profile />} />
+        </Routes>
       </div>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App
