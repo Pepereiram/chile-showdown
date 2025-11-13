@@ -5,8 +5,10 @@ import type { Team } from "../../types/Team";
 import type { TeamChilemon } from "../../types/TeamChilemon";
 import ButtonLink from "../../components/ButtonLink";
 import TeamSelector from "../../components/TeamSelector";
+import LayoutNavbar from "../../components/LayoutNavbar";
+
 type TeamView = {
-  id: number;
+  id: string;
   name: string;
   members: string[];
 };
@@ -21,38 +23,38 @@ export default function Home() {
   // Definimos los estados
   const [teams, setTeams] = useState<TeamView[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<TeamView | null>(null);
-  const [open, setOpen] = useState(false);
+  //const [open, setOpen] = useState(false);
 
   useEffect(() => {
     async function load() {
       try {
-        // La idea es tener usuarios como en el TeamView, entonces primero:
-        // extraer los equipos del usuario autenticado
+        const auth = {
+          withCredentials: true,
+          headers: { "X-CSRF-Token": localStorage.getItem("csrf") || "" },
+        };
+
+        // Equipos del usuario autenticado (el backend usa la cookie, no userId)
         const teamsRes = await axios.get<Team[]>(
-          `http://localhost:3001/teams`,
-          { params: { userId: user?.id } }
+          `http://localhost:3001/api/teams`,
+          auth
         );
 
         const teamsCargados = teamsRes.data;
-        // Por cada equipo, extremos sus miembros
+
+        // Por cada equipo, extrae sus miembros
         const teamsWithMembers: TeamView[] = await Promise.all(
           teamsCargados.map(async (t) => {
             const membersRes = await axios.get<TeamChilemon[]>(
-              `http://localhost:3001/teamChilemon`,
-              { params: { teamId: t.id } }
+              `http://localhost:3001/api/teamChilemon`,
+              { params: { teamId: t.id }, ...auth }
             );
 
-            // Ahora formateamos los miembros para mostrarlos, solo usamos 2 caracteres
-            // del nickname.
             const members = membersRes.data
               .sort((a, b) => a.position - b.position)
-              .map((m) => {
-                const nick = (m.nickname).trim();
-                return nick.slice(0, 2).toUpperCase();
-              });
-            // Ahora tenemos el equipo con sus miembros y nombres formateados
+              .map((m) => m.nickname.trim().slice(0, 2).toUpperCase());
+
             return {
-              id: t.id,
+              id: String(t.id),
               name: t.name,
               members,
             };
@@ -71,27 +73,38 @@ export default function Home() {
   console.log(teams);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 p-4">
-      <main className="text-center flex flex-col gap-3">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">
-          Chilemon Showdown
-        </h1>
+    <>
+      <LayoutNavbar />
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 p-4">
+        <main className="text-center flex flex-col gap-3">
+          <h1 className="text-4xl font-bold text-blue-600 mb-4">
+            Chilemon Showdown
+          </h1>
 
-        <div className="flex flex-col gap-2">
-          <ButtonLink route="random-battle" text="Random Battle" />
-          <ButtonLink route="team-builder" text="Team Builder" />
-          <TeamSelector />
-          <ButtonLink route="battle/" text="Battle with Selected Team" />
+          <div className="flex flex-col gap-2">
+            <ButtonLink route="random-battle" text="Random Battle" />
+            <ButtonLink route="team-builder" text="Team Builder" />
 
-          {!selectedTeam && (
-            <div className="text-gray-500 text-sm mt-2">
-              No tienes equipos todavía.
-            </div>
-          )}
+            <TeamSelector
+              teams={teams}
+              selectedTeamId={selectedTeam?.id ?? null}
+              onChange={(id) =>
+                setSelectedTeam(teams.find((t) => t.id === id) || null)
+              }
+            />
 
-          <ButtonLink route="profile" text="Edit Profile" />
-        </div>
-      </main>
-    </div>
+            <ButtonLink route="battle/" text="Battle with Selected Team" />
+
+            {teams.length === 0 && (
+              <div className="text-gray-500 text-sm mt-2">
+                No tienes equipos todavía.
+              </div>
+            )}
+
+            <ButtonLink route="profile" text="Edit Profile" />
+          </div>
+        </main>
+      </div>
+    </>
   );
 }

@@ -4,9 +4,11 @@
   "description": "Backend for Chilemon Showdown using Express, TypeScript, and Mongoose",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon --watch src --exec ts-node src/index.ts",
+    "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "seed": "npx ts-node src/utils/seedChilemon.ts",
+    "start": "npm run build && npm run seed && node dist/index.js",
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -24,7 +26,9 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.10.6",
     "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
   }
 }

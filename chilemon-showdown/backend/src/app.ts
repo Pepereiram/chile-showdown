@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import { requestLogger, unknownEndpoint, errorHandler } from "./middleware/loggerMiddleware";
 import usersRouter from "./controllers/users";
 import loginRouter from "./controllers/login";
+import teambuilderRouter from "./controllers/teambuilder";
+import chilemonRouter from "./controllers/chilemon";
 
 const ALLOWED_ORIGINS = [
   "http://localhost:5173",
@@ -37,6 +39,8 @@ app.get("/", (_req, res) => {
 
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
+app.use("/api", teambuilderRouter);  
+app.use("/chilemon", chilemonRouter);
 
 // 404
 app.use(unknownEndpoint);

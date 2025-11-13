@@ -5,7 +5,7 @@ import misterionImg from "../../assets/misterion.jpg";
 import papiMickeyImg from "../../assets/papimickey.jpg";
 import vardokImg from "../../assets/vardok.jpg";
 import xodaImg from "../../assets/xoda.jpg";
-
+import LayoutNavbar from "../../components/LayoutNavbar";
 function CardScore({ score, tag }: { score: number; tag: string }) {
   return (
     <div className="rounded-xl bg-white/70 p-4 text-center shadow-sm">
@@ -90,7 +90,9 @@ function BattleHistory() {
 
 export default function Profile() {
   
-  return (
+  return (<>
+  
+    <LayoutNavbar />
     <div className="w-screen min-h-screen bg-white">
       {/* Primera columna con los datos del usuario */}
       <div className="grid grid-cols-3 gap-6 p-6 w-full h-full">
@@ -111,5 +113,6 @@ export default function Profile() {
         </Column>
       </div>
     </div>
+    </>
   );
 }
