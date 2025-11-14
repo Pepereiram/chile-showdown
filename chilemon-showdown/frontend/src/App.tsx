@@ -3,7 +3,6 @@ import './App.css'
 
 import LoginRegister from './pages/loginRegister/LoginRegister';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useAuth } from './hooks/useAuth';
 import TeamBuilder from './pages/teamBuilder/TeamBuilder';
 import Home from './pages/home/Home';
 import Profile from './pages/profile/Profile';
