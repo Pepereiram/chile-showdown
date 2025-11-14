@@ -13,7 +13,6 @@ const App: React.FC = () => {
   const { isLoggedIn } = useAuth();
 
   const navTabs = [
-    { label: 'Login', path: '/' },
     { label: 'Home', path: '/home' },
     { label: 'Team Builder', path: '/team-builder' },
     { label: 'Profile', path: '/profile' },
@@ -22,7 +21,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <div className="content mt-16">
-        <Navtab tabs={navTabs} />
+        <Navtab tabs={navTabs} hidePaths={["/"]}/>
         <Routes>
               <Route path="/" element={<LoginRegister />} />
               <Route path="/home" element={<Home />} />
