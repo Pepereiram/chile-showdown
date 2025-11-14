@@ -5,7 +5,6 @@ import type { Team } from "../../types/Team";
 import type { TeamChilemon } from "../../types/TeamChilemon";
 import ButtonLink from "../../components/ButtonLink";
 import TeamSelector from "../../components/TeamSelector";
-import LayoutNavbar from "../../components/LayoutNavbar";
 
 type TeamView = {
   id: string;
@@ -74,7 +73,6 @@ export default function Home() {
 
   return (
     <>
-      <LayoutNavbar />
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 p-4">
         <main className="text-center flex flex-col gap-3">
           <h1 className="text-4xl font-bold text-blue-600 mb-4">
