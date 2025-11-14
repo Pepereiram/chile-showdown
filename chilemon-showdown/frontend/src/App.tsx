@@ -10,7 +10,6 @@ import Profile from './pages/profile/Profile';
 import Navtab from './components/Navtab';
 
 const App: React.FC = () => {
-  const { isLoggedIn } = useAuth();
 
   const navTabs = [
     { label: 'Home', path: '/home' },
