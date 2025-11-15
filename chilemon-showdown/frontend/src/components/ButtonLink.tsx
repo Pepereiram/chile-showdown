@@ -1,25 +1,24 @@
-
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 interface ButtonLinkProps {
-    route: String;
-    text: String;
+    route: string;
+    text: string;
+    fullWidth?: boolean;
 }
 
-const ButtonLink = ({ route, text}: ButtonLinkProps) => {
+const ButtonLink = ({ route, text, fullWidth = false }: ButtonLinkProps) => {
     const navigate = useNavigate();
 
-    const basicStyle = "bg-blue-500 text-white font-medium hover:bg-blue-600 active:bg-blue-700 rounded-lg px-6 py-2 transition";
- 
     return (
-        <button
-            className={basicStyle}
-            onClick={() => navigate("/" + route)}>
+        <Button
+            variant="contained"
+            fullWidth={fullWidth}
+            onClick={() => navigate("/" + route)}
+        >
             {text}
-        </button>
-    )
-}
-
-
+        </Button>
+    );
+};
 
 export default ButtonLink;

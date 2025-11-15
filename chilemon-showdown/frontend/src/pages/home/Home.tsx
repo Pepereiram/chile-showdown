@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "./Home.css";
 import type { Team } from "../../types/Team";
 import type { TeamChilemon } from "../../types/TeamChilemon";
+
 import ButtonLink from "../../components/ButtonLink";
 import TeamSelector from "../../components/TeamSelector";
+
+import { Container, Paper, Typography, Stack } from "@mui/material";
 
 type TeamView = {
   id: string;
   name: string;
   members: string[];
 };
-
 
 export default function Home() {
   const storedUser = typeof window !== "undefined" ? localStorage.getItem("user") : null;
@@ -72,37 +73,63 @@ export default function Home() {
   console.log(teams);
 
   return (
-    <>
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 p-4">
-        <main className="text-center flex flex-col gap-3">
-          <h1 className="text-4xl font-bold text-blue-600 mb-4">
-            Chilemon Showdown
-          </h1>
+    <Container
+      maxWidth="sm"
+      sx={{
+        minHeight: "calc(100vh - 64px)", // Navbar height
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Paper
+        elevation={6}
+        sx={{
+          width: "100%",
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          variant="h4"
+          fontWeight={700}
+          color="primary"
+          sx={{ mb: 1 }}
+        >
+          Chilemon Showdown
+        </Typography>
 
-          <div className="flex flex-col gap-2">
-            <ButtonLink route="random-battle" text="Random Battle" />
-            <ButtonLink route="team-builder" text="Team Builder" />
+        <Stack spacing={2} alignItems="center" sx={{ width: "100%" }}>
+          <ButtonLink route="random-battle" text="Random Battle" fullWidth />
 
-            <TeamSelector
-              teams={teams}
-              selectedTeamId={selectedTeam?.id ?? null}
-              onChange={(id) =>
-                setSelectedTeam(teams.find((t) => t.id === id) || null)
-              }
-            />
+          <ButtonLink route="team-builder" text="Team Builder" fullWidth />
 
-            <ButtonLink route="battle/" text="Battle with Selected Team" />
+          <TeamSelector
+            teams={teams}
+            selectedTeamId={selectedTeam?.id ?? null}
+            onChange={(id) =>
+              setSelectedTeam(teams.find((t) => t.id === id) || null)
+            }
+          />
 
-            {teams.length === 0 && (
-              <div className="text-gray-500 text-sm mt-2">
-                No tienes equipos todavía.
-              </div>
-            )}
+          <ButtonLink route="battle/" text="Battle with Selected Team" fullWidth />
 
-            <ButtonLink route="profile" text="Edit Profile" />
-          </div>
-        </main>
-      </div>
-    </>
+          {teams.length === 0 && (
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ mt: 1 }}
+            >
+              No tienes equipos todavía.
+            </Typography>
+          )}
+
+          <ButtonLink route="profile" text="Edit Profile" fullWidth />
+        </Stack>
+      </Paper>
+    </Container>
   );
 }
