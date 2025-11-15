@@ -14,7 +14,7 @@ const theme = createTheme({
     fontFamily: "Inter, Roboto, sans-serif",
     button: {
       textTransform: "none",
-      fontWeight: 600,
+      fontWeight: 300,
     },
   },
 
@@ -84,7 +84,7 @@ const theme = createTheme({
         root: {
           minHeight: 48,
           padding: "12px 24px",
-          fontWeight: 500,
+          fontWeight: 400,
         },
       },
     },

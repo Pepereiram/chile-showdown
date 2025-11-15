@@ -107,7 +107,7 @@ const LoginRegister: React.FC = () => {
 
         <Typography
           variant="h6"
-          fontWeight={600}
+          fontWeight={550}
           sx={{ textAlign: "left", mb: 2 }}
         >
           {login}
