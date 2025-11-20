@@ -69,7 +69,7 @@ const TeamBuilder: React.FC = () => {
           const chilemonRes = await axios.get<Chilemon[]>("http://localhost:3001/chilemon");
 
           const members = membersRes.data.map((m: any) => {
-            const chilemon = chilemonRes.data.find(c => c.id === m.pokemonId);
+            const chilemon = chilemonRes.data.find(c => c.id === m.chilemonId);
             return chilemon ? {
               id: chilemon.id,
               name: chilemon.name,
@@ -80,7 +80,7 @@ const TeamBuilder: React.FC = () => {
           return {
             id: team.id,
             name: team.name,
-            members
+            members: members
           };
         })
       );
