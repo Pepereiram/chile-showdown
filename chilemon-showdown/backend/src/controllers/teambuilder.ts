@@ -1,12 +1,7 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
 import express from "express";
-import { randomUUID } from "crypto";
-import User from "../models/users";
-import { JWT_SECRET } from "../utils/config";
 import { authenticate } from "../middleware/authMiddleware";
 import Team from "../models/team";
-import TeamChilemon from "../models/teamChilemon";
+import TeamChilemon, { ITeamChilemon } from "../models/teamChilemon";
 
 const router = express.Router();
 
@@ -63,10 +58,9 @@ router.post("/teams", authenticate, async (req, res) => {
 
     const team = new Team({ userId, name });
     const savedTeam = await team.save();
-
-    const teamMembers = members.map((pokemonId: number, index: number) => ({
+    const teamMembers: ITeamChilemon[] = members.map((pokemonId: number, index: number) => ({
       teamId: savedTeam._id,
-      pokemonId,
+      chilemonId: pokemonId,
       position: index,
       nickname: `Pokemon${pokemonId}`,
       level: 100,
