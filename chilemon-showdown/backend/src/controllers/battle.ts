@@ -6,6 +6,8 @@ import { IPlayer } from "../models/battle";
 import User from "../models/users"
 import Team from "../models/team"
 import engine from "../services/battle/battleEngine";
+import express from "express";
+import { authenticate } from "../middleware/authMiddleware";
 
 // Carga el team del usuario (ajústalo a tu esquema real)
 export async function loadTeamForUser(teamId: Types.ObjectId) {
@@ -25,19 +27,16 @@ function makePlayer(userId: Types.ObjectId, username: string, team: ITeamChilemo
   };
 }
 
-import express from "express";
-import { authenticate } from "../middleware/authMiddleware"
 const router = express.Router()
 
 // Obtener la batalla correspondiente por ID
 router.get("/battles/:id", authenticate, async (req, res) => {
-    
+    const {userId} = req.body;
     const battle = await Battle.findById(req.params.id);
     if (!battle) return res.status(404).json({ error: "Battle not found" });
 
     // validar que el usuario participa en esta battle
-    const meId = req.userId;
-    const isPlayer = battle.players.some(p => p.userId.toString() === meId);
+    const isPlayer = battle.players.some(p => p.userId.toString() === userId);
     if (!isPlayer) return res.status(403).json({ error: "No perteneces a esta batalla" });
 
     res.json(battle);
@@ -46,11 +45,11 @@ router.get("/battles/:id", authenticate, async (req, res) => {
 
 // Crear instancia de la batalla
 router.post("/battles", authenticate, async (req, res) => {
-
-    const user = await User.findById(req.userId);
-    const teamSelected = req.body.teamId // Desde el frontEnd pasar la id del equipo seleccionado
+    const {userId, teamId} = req.body;
+    const user = await User.findById(userId);
+    const teamSelected = teamId // Desde el frontEnd pasar la id del equipo seleccionado
     const teamUser = await Team.findById(teamSelected)
-
+    console.log("Team seleccionado:", teamUser);
     // Validaciones
     if (!user) {
         return res.status(404).json({ error: "Usuario no encontrado" });
@@ -104,40 +103,43 @@ router.post("/battles", authenticate, async (req, res) => {
 })
 
 router.post("/battles/:id/move", authenticate, async (req, res) => {
+    const {userId, moveId} = req.body;
     const battle = await Battle.findById(req.params.id).exec();
     if (!battle) return res.status(404).json({ error: "Battle not found" });
 
     // Identificar bien quien manda la acción
-    const user = await User.findById(req.userId);
+    const user = await User.findById(userId);
     if (!user) {
         return res.status(404).json({ error: "Usuario no encontrado" });
     }
     const meId = user._id.toString()
 
-    const moveId = Number(req.body.moveId);
-    if (!Number.isFinite(moveId)) throw new Error("moveId inválido");
+    const moveIdNumber = Number(moveId);
+    if (!Number.isFinite(moveIdNumber)) throw new Error("moveId inválido");
 
-    await engine.submitMove(battle, meId, moveId);
+    await engine.submitMove(battle, meId, moveIdNumber);
     await battle.save();
 
     return res.json(battle);
 })
 
 router.post("/battles/:id/switch", authenticate, async (req, res) => {
+    const {userId, toIndex} = req.body;
+
     const battle = await Battle.findById(req.params.id).exec();
     if (!battle) return res.status(404).json({ error: "Battle not found" });
 
     // Identificar bien quien manda la acción
-    const user = await User.findById(req.userId);
+    const user = await User.findById(userId);
     if (!user) {
         return res.status(404).json({ error: "Usuario no encontrado" });
     }
     const meId = user._id.toString()
 
-    const toIndex = Number(req.body.toIndex);
-    if (!Number.isFinite(toIndex)) throw new Error("moveId inválido");
+    const toIndexNumber = Number(toIndex);
+    if (!Number.isFinite(toIndexNumber)) throw new Error("moveId inválido");
     
-    await engine.submitMove(battle, meId, toIndex);
+    await engine.submitMove(battle, meId, toIndexNumber);
     await battle.save();
 
     return res.json(battle);
@@ -145,10 +147,11 @@ router.post("/battles/:id/switch", authenticate, async (req, res) => {
 
 
 router.post("/battles/:id/forfeit", authenticate, async (req, res) => {
+    const {userId} = req.body;
     const battle = await Battle.findById(req.params.id).exec();
     if (!battle) return res.status(404).json({ error: "Battle not found" });
 
-    const user = await User.findById(req.userId);
+    const user = await User.findById(userId);
     if (!user) {
         return res.status(404).json({ error: "Usuario no encontrado" });
     }
