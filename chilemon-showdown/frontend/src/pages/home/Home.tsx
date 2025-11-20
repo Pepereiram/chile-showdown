@@ -71,6 +71,31 @@ export default function Home() {
   }, [user?.id]);
   console.log(teams);
 
+  const createBattleLink = () => {
+    if (!selectedTeam) return "battle/";
+    return `battle/?teamId=${selectedTeam.id}`;
+  };
+
+  const handleBattleCreation = async () => {
+    try {
+      const auth = {
+        withCredentials: true,
+        headers: { "X-CSRF-Token": localStorage.getItem("csrf") || "" },
+      };
+      const response = await axios.post(
+        "http://localhost:3001/api/battles",
+        { teamId: selectedTeam?.id, userId: user?.id },
+        auth
+      );
+      const battle = response.data;
+      console.log("Batalla creada:", battle);
+      return battle.id;
+    }
+    catch (error) {
+      console.error("Error creating battle:", error);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 p-4">
