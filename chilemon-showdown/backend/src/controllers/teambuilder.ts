@@ -107,7 +107,7 @@ router.put("/teams/:id", authenticate, async (req, res) => {
 
       const teamMembers = members.map((pokemonId: number, index: number) => ({
         teamId: team._id,
-        pokemonId,
+        chilemonId: pokemonId,
         position: index,
         nickname: `Pokemon${pokemonId}`,
         level: 100,
