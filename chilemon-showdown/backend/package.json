@@ -8,7 +8,7 @@
     "build": "tsc",
     "seed": "npx ts-node src/utils/seedChilemon.ts",
     "start": "npm run build && npm run seed && node dist/index.js",
-    "clean": "rimraf dist"
+    "start:test": "cross-env NODE_ENV=test ts-node-dev src/index.ts"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -25,6 +25,7 @@
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.10.6",
+    "cross-env": "^10.1.0",
     "nodemon": "^3.1.10",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
