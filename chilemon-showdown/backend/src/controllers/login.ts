@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     sameSite: "lax",
   });
 
-  return res.status(200).send({ username: user.username });
+  return res.status(200).send({ id: user._id.toString(), username: user.username });
 });
 
 

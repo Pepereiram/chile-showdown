@@ -44,7 +44,7 @@ router.get("/battles/:id", authenticate, async (req, res) => {
 });
 
 // Crear instancia de la batalla
-router.post("/battles", authenticate, async (req, res) => {
+router.post("/battles", async (req, res) => { // IMPORTANTE: AGREGAR AUTENTICACIÓN
     const {userId, teamId} = req.body;
     const user = await User.findById(userId);
     const teamSelected = teamId // Desde el frontEnd pasar la id del equipo seleccionado
@@ -57,7 +57,7 @@ router.post("/battles", authenticate, async (req, res) => {
     if (!teamUser) {
         return res.status(404).json({ error: "Equipo no encontrado" });
     }
-    if (teamUser.userId != user._id){
+    if (teamUser.userId.toString() != user._id.toString()){
         return res.status(404).json({ error: "Equipo no pertenece a dicho usuario"})
     }
 

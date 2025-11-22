@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import './LoginRegister.css';
 
-type LoginResponse = { username: string };
+type LoginResponse = { id: string, username: string };
 
 const LoginRegister: React.FC = ({}) => {
     const [login, setLogin] = useState("Login");
@@ -30,7 +30,7 @@ const LoginRegister: React.FC = ({}) => {
       if (csrf) {
         localStorage.setItem("csrf", csrf);
       }
-      localStorage.setItem("user", JSON.stringify({ username: res.data.username }));
+      localStorage.setItem("user", JSON.stringify({ id: res.data.id, username: res.data.username }));
       setError("");
       navigate("/home");
     } catch (err: any) {
