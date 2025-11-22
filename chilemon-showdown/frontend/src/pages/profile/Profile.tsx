@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { CardScore, Column, ActiveBattleItem } from '../../components/profile';
+import { CardScore, Column, ActiveBattleItem, UserName } from '../../components/profile';
 import {getUserBattles, type BattleSummary} from "../../services/battle";
 import { useEffect, useState } from "react";
 export default function Profile() {
@@ -39,7 +39,7 @@ export default function Profile() {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
           gap: 3,
           height: '100%',
         }}
@@ -47,9 +47,8 @@ export default function Profile() {
         <Box>
           <Column title="User Profile">
             <Box sx={{ mt: 2 }}>
-              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
-                <CardScore score={120} tag="Wins" />
-                <CardScore score={69} tag="Losses" />
+              <UserName name={user.username} />
+              <Box sx={{ mt: 2, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
               </Box>
             </Box>
           </Column>
