@@ -1,20 +1,29 @@
-import eggkingImg from "../../assets/HuevitoRey.jpeg";
-import corxeaImg from "../../assets/corxea.jpg";
-import misterionImg from "../../assets/misterion.jpg";
-import papiMickeyImg from "../../assets/papimickey.jpg";
-import vardokImg from "../../assets/vardok.jpg";
-import xodaImg from "../../assets/xoda.jpg";
-
 import Box from '@mui/material/Box';
-import { CardScore, Column, UserName, BattleHistory, ActiveBattleItem } from '../../components/profile';
-
+import Typography from '@mui/material/Typography';
+import { CardScore, Column, ActiveBattleItem } from '../../components/profile';
+import {getUserBattles, type BattleSummary} from "../../services/battle";
+import { useEffect, useState } from "react";
 export default function Profile() {
-  const battles = [
-    { name: "Corxea", result: "Victory", img: corxeaImg },
-    { name: "Misterion", result: "Defeat", img: misterionImg },
-    { name: "Egg King", result: "Victory", img: eggkingImg },
-    { name: "Vardok", result: "Defeat", img: vardokImg },
-  ];
+
+  // Obtenemos los datos del usuario para poder mostrar la lista de batallas activas
+
+  const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null;
+  
+  if (!user) {
+    return <Box sx={{ p: 3 }}>Please log in to view your profile.</Box>;
+  }
+  
+  const [battles, setBattles] = useState<BattleSummary[]>([]);
+  // Obtenemos los id de las batallas de cada usuario
+
+  useEffect(() => {
+    const fetchBattles = async () => {
+      const battles = await getUserBattles(user.id);
+      console.log("Battles fetched:", battles);
+      setBattles(battles || []);
+    };
+    fetchBattles();
+  }, [user.id]);
 
   return (
     <Box
@@ -37,7 +46,6 @@ export default function Profile() {
       >
         <Box>
           <Column title="User Profile">
-            <UserName name="Papi Mickey" location="Paine" avatarSrc={papiMickeyImg} />
             <Box sx={{ mt: 2 }}>
               <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
                 <CardScore score={120} tag="Wins" />
@@ -48,14 +56,26 @@ export default function Profile() {
         </Box>
 
         <Box>
-          <Column title="Player History">
-            <BattleHistory battles={battles} />
-          </Column>
-        </Box>
-
-        <Box>
           <Column title="Active Battle">
-            <ActiveBattleItem img={xodaImg} title="Current Battle: Ash vs. Gary" />
+            <Box sx={{ mt: 2, display: 'grid', gap: 2 }}>
+              {battles && battles.length > 0 ? (
+                battles.map((b) => {
+                  const id = b._id;
+                  const title = b.players && b.players.length > 0
+                    ? b.players.map(p => p.username ?? p.userId).join(' vs ')
+                    : `Battle ${id}`;
+                  return (
+                    <ActiveBattleItem
+                      key={id}
+                      id={id}
+                      title={title}
+                    />
+                  );
+                })
+              ) : (
+                <Typography variant="body2" color="text.secondary">No active battles</Typography>
+              )}
+            </Box>
           </Column>
         </Box>
       </Box>
