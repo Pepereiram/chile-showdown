@@ -8,7 +8,7 @@ import Team from "../models/team"
 import engine from "../services/battle/battleEngine";
 import express from "express";
 import { authenticate } from "../middleware/authMiddleware";
-
+import type { IBattle } from "../models/battle";
 // Carga el team del usuario (ajústalo a tu esquema real)
 export async function loadTeamForUser(teamId: Types.ObjectId) {
     return TeamChilemon.find({ teamId }).exec();
@@ -41,6 +41,20 @@ router.get("/battles/:id", authenticate, async (req, res) => {
 
     res.json(battle);
     
+});
+
+router.get("/:userId/battles", authenticate, async (req, res) => {
+    const {userId} = req.params;
+    if (!userId) {
+        return res.status(400).json({ error: "userId es requerido" });
+    }
+    const battles: IBattle[] = await Battle.find({});
+    console.log("All battles",battles);
+    const userBattles = battles.filter(battle => 
+        battle.players.some(p => p.userId.toString() === userId)
+    );
+    console.log("User battles for userId", userId, userBattles);
+    res.json(userBattles);
 });
 
 // Crear instancia de la batalla
