@@ -83,9 +83,10 @@ export default function Home() {
       const userId = (user?.id || '') as string;
       const res = await createBattle(userId, selectedTeam.id);
       const id = (res as any)._id ?? (res as any).id;
+      console.log("Created battle with ID:", id);
       if (id) {
         // navigate to battle page with query param
-        navigate(`/battle?battleId=${id}`);
+        navigate(`/battle/${id}`);
       }
     } catch (err) {
       console.error('Error creating battle via service', err);

@@ -26,7 +26,7 @@ const App: React.FC = () => {
               <Route path="/home" element={<Home />} />
               <Route path="/team-builder" element={<TeamBuilder />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/battle" element={<Battle />} />
+              <Route path="/battle/:battleId" element={<Battle />} />
         </Routes>
       </div>
     </BrowserRouter>

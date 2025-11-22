@@ -1,9 +1,10 @@
-import {useState} from "react";
+import {useState, useRef} from "react";
 import { HealthBar } from "../../components/HealthBar";
-import { useRef } from "react";
+import { useParams } from "react-router-dom";
 import type { HealthBarHandle } from "../../components/HealthBar";
 export const Battle: React.FC = () => {
-  const [battleId, setBattleId] = useState<string>("");
+  const { battleId } = useParams<{ battleId: string }>();
+  console.log("Battle ID from params:", battleId);
   const ref = useRef<HealthBarHandle | null>(null);
   return (
     <div className="battle-view pd-100px">
