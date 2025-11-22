@@ -79,9 +79,9 @@ router.post("/battles", async (req, res) => { // IMPORTANTE: AGREGAR AUTENTICACI
 
     const waiting = await Battle.findOne({
         status: "waiting",
-        "player.0.userId:": {$ne: meId},
-        "players.1": {$exists: false},
-    }).exec()
+        "players.0.userId": { $ne: meId },
+        "players.1": { $exists: false }
+    }).exec();
 
     // Matchmaking, había alguien esperando batalla, nos unimos a esa
     if (waiting) {
