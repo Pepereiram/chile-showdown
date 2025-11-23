@@ -13,6 +13,6 @@ declare global {
 
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log(`Server running on https://fullstack.dcc.uchile.cl:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
   });
 });
