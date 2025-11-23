@@ -79,6 +79,7 @@ const LoginRegister: React.FC = ({}) => {
         <div className="input">
           <input
             type="text"
+            name="username"
             placeholder="Username"
             value={username}
             onChange={e => setUsername(e.target.value)}
@@ -88,6 +89,7 @@ const LoginRegister: React.FC = ({}) => {
         <div className="input">
           <input
             type="password"
+            name="password"
             placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
