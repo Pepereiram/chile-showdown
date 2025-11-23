@@ -55,7 +55,7 @@ export const Battle: React.FC = () => {
   }
 
   const parsedUser = JSON.parse(currentUser);
-  const currentUserId = parsedUser.id;
+  const currentUserId: string = parsedUser.id;
   // Figure out which side is "me" and which is the opponent
   const { me, opp } = useMemo(() => {
     if (!battle || battle.players.length === 0) {
@@ -134,7 +134,7 @@ export const Battle: React.FC = () => {
     if (!battleId || submitting) return;
     try {
       setSubmitting(true);
-      const updated = await battleService.submitMove(battleId, moveId);
+      const updated = await battleService.submitMove(battleId, moveId, currentUserId);
       setBattle(updated);
     } catch (err: any) {
       setError(err?.message ?? "Error al enviar movimiento");
