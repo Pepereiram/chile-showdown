@@ -1,7 +1,7 @@
 import { IPlayer, IBattleChilemonState } from '../../models/battle';
 import { ITeamChilemon } from '../../models/teamChilemon';
 import { IChilemon } from '../../models/chilemon';
-import { IMove } from '../../models/moves';
+import Move, { IMove } from '../../models/moves';
 import Chilemon from '../../models/chilemon';
 import {Stat} from '../../models/chilemon';
 
@@ -114,19 +114,24 @@ export async function getStat(player: IPlayer, statName: keyof BaseStats): Promi
 }
 
 /* =========================================================
-   MOVES TEMPORALES (REGISTRO)
+   MOVES DESDE DB (REGISTRO EN MEMORIA)
    ========================================================= */
-import movesRaw from "../../../data/moves.json";
 
-const MOVES_BY_ID = new Map<number, IMove>(
+const MOVES_BY_ID = new Map<number, IMove>();
+let movesLoaded = false;
 
-  (movesRaw).map((m: IMove) => {
+async function loadMovesFromDB() {
+  if (movesLoaded) return;
+
+  const moves = (await Move.find().lean()) as IMove[];
+
+  for (const m of moves) {
     const mv: IMove = {
       id: m.id,
       name: m.name,
       damage_class: m.damage_class,
-      power: m.power ?? 0,
-      pp: m.pp ?? null,
+      power: m.power ?? null,
+      pp: m.pp,
       priority: m.priority ?? 0,
       stat_changes: Array.isArray(m.stat_changes) ? m.stat_changes : [],
       target: m.target,
@@ -134,15 +139,27 @@ const MOVES_BY_ID = new Map<number, IMove>(
       ailment: m.ailment,
       effect_entry: m.effect_entry,
     };
-    return [mv.id, mv];
-  })
-);
+    MOVES_BY_ID.set(mv.id, mv);
+  }
 
-export function getMoveData(moveId: number) {
-    const move = MOVES_BY_ID.get(moveId);
-    if (!move) throw new Error(`Move ID ${moveId} no encontrado`);
-    return move;
+  movesLoaded = true;
+  console.log(`Moves cache loaded: ${MOVES_BY_ID.size} moves.`);
 }
+
+/** Asegura que los movimientos estén cargados en memoria. */
+export async function ensureMovesLoaded(): Promise<void> {
+  if (!movesLoaded) {
+    await loadMovesFromDB();
+  }
+}
+
+/** Devuelve los datos de un movimiento desde la caché. */
+export function getMoveData(moveId: number): IMove {
+  const move = MOVES_BY_ID.get(moveId);
+  if (!move) throw new Error(`Move ID ${moveId} no encontrado`);
+  return move;
+}
+
 
 /* =========================================================
    CALCULAR DAÑO

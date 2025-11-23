@@ -79,7 +79,8 @@ export class BattleEngine {
             battle.log.push(`${attacker.username} cambió a Chilemon #${action.toIndex + 1}.`);
         return;
         }
-
+        
+        await battleHelpers.ensureMovesLoaded();
         const move = battleHelpers.getMoveData(action.moveId);
 
         if (move.damage_class === "status") {
