@@ -62,9 +62,9 @@ router.post("/teams", authenticate, async (req, res) => {
       teamId: savedTeam._id,
       chilemonId: pokemonId,
       position: index,
-      nickname: `Pokemon${pokemonId}`,
+      nickname: `Pokemon${member.pokemonId}`,
       level: 100,
-      moves: [],
+      moves: member.moves || [],  // ← Usa los movimientos recibidos
       effort: []
     }));
 
