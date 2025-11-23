@@ -39,8 +39,8 @@ function buildFetchOptions(method: string, body?: any) {
 	return opts;
 }
 
-export async function getUserBattles(): Promise<BattleSummary[]> {
-	const res = await fetch(`${BASE}/battles`, buildFetchOptions('GET'));
+export async function getUserBattles(userId:string): Promise<BattleSummary[]> {
+	const res = await fetch(`${BASE}/${encodeURIComponent(userId)}/battles`, buildFetchOptions('GET'));
 
 	await ensureJsonResponse(res, 'Failed to fetch user battles:');
 	return (await res.json()) as BattleSummary[];
