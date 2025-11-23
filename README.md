@@ -52,6 +52,31 @@ contra personas de todo el país!
 
 ## Testing E2E
 
+## Herramienta usada
+
+La herramienta utilizada para el testing End-to-End es Playwright. Los tests están organizados en el directorio e2e-tests y se configuran mediante playwright.config.ts. El código de prueba se escribe usando la API de test y expect de Playwright.
+
+## Flujos cubierto
+
+Los tests E2E cubren los principales flujos de la gestión de equipos (Team Builder), que representan las operaciones CRUD (Create, Read, Update, Delete).
+
+### Autenticación
+
+1. Inicio de sesión: Verifica que, al ingresar credenciales válidas, el usuario es redirigido correctamente a la página de inicio (/*home*/).
+
+2. Accesos protegidos: Verifica que la API protegida (/api/teams) retorna 401 (Unauthorized) si no se ha iniciado sesión. También una vez que el usuario inicia sesión (login), verifica que la misma ruta protegida ahora retorna 200 (OK), confirmando que la autenticación funciona correctamente.
+
+### CRUD
+
+1. Crear: Se simula la selección de 6 chilemon, se guarda un nombre del equipo, y se verifica que se guarde al presionar buardar.
+
+2. Read: Se selecciona un equipo creado (como en el paso anterior por ejemplo), luego se verifica que los slots estén llenos por ls chilemon.
+
+3. Update: Se prueba remover un chilemon, añadir el mismo o uno distinto y luego se guarda. Se vuelve a verificar los slots llenos y se compara la lista anterior con la nueva, confirmando el reemplazo.
+
+4. Delete: Crea un equipo, configura Playwright para aceptar automáticamente la ventana de confirmación, y luego hace clic en el botón de eliminar asociado al equipo en la barra lateral. Se confirma que el equipo ya no sea visible en la barra lateral, verificando también el conteo de elementos con dicho nombre sea 0.
+
+
 ## Desiciones de diseño y librerías de estilos
 
 ## Despliegue de la aplicación
