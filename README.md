@@ -1,76 +1,84 @@
-# chile-showdown
+# Chilemon-Showdown
 Proyecto para CC5003 - Aplicaciones Web Reactivas. Primavera 2025.
 
-# Instalar dependencias
+## Descripción del proyecto 
 
-Antes de correr cualquier parte de la acplicación, es necesario instalar las dependencias tanto de la raíz del proyecto como las de frontend y backend. Para ello, estando en `chilemon-showdown`, hacer lo siguiente:
+Hoy la comunidad chilena que juega simuladores PvP debe usar plataformas globales (idioma, 
+latencia, eventos y horarios no alineados). Con Chilémon Showdown © queremos cambiar eso: 
+reemplazar los nombres de los Pokémones por referencias a la cultura chilena y que los 
+jugadores puedan encontrar batallas en una modalidad horaria más cercana a su contraparte. 
+Queremos que los usuarios compitan en línea por turnos asíncronos, seleccionando equipos 
+de “pokemon” con nombres inspirados en la cultura local.
+
+En esta aplicación web, el usuario será capaz de crear su propio equipo de chilémon, y lanzarse a batallar
+contra personas de todo el país!
+
+## Estructura del Estado Global
+
+## Mapa de rutas y flujo de autenticación
+
+### Mapa de rutas
+
 ```bash
-npm install
-cd frontend
-npm install
-cd ..
-cd backend
-npm install
+/api
+ ├── /login               
+ │     ├── /                    (POST)    - Iniciar sesión
+ │     ├── /me                  (GET)     - Obtener usuario autenticado
+ │     └── /logout              (POST)    - Cerrar sesión
+ ├── /users
+ │     ├── /                    (GET)     - Obtener todos los usuarios
+ │     └── /                    (POST)    - Registrar nuevo usuario
+ ├── /chilemon
+ │     ├── /                    (GET)     - Lista de todos los chilemon
+ │     └── /:id                 (GET)     - Obtener Chilemon por ID
+ ├── /team
+ │     ├── /teams               (GET)     - Obtener todos los equipos del usuario
+ │     ├── /teams/:id           (GET)     - Obtener equipo único por ID
+ │     ├── /teams               (POST)    - Crear un nuevo equipo
+ │     ├── /teams/:id           (PUT)     - Actualizar un equipo
+ │     ├── /teams/:id           (DELETE)  - Eliminar un equipo
+ │     └── /teamChilemon        (GET)     - Obtener chilemon, miembros de un equipo
+ ├── /battles
+ │     ├── /battles/:id         (GET)     - Obtener todos los equipos del usuario
+ │     ├── /userId/:battles     (GET)     - Obtener todas las batallas donde participa UserId
+ │     ├── /battles             (POST)    - Crea una batalla o se une a una en estado waiting
+ │     ├── /battles/:id/move    (GET)     - Obtener todos los equipos del usuario
+ │     ├── /battles/:id/switch  (GET)     - Obtener todos los equipos del usuario
+ │     └── /battles/:id/forfeit (GET)     - Obtener todos los equipos del usuario
+ ```
+
+### Flujo de autenticación
+![Flujo de autenticación](./flujo_autenticacion.png)
+
+## Testing E2E
+
+## Desiciones de diseño y librerías de estilos
+
+## Despliegue de la aplicación
+
+URL aplicación desplegada: 
+
+```bash
+fullstack.dcc.uchile.cl:7142
 ```
 
-# Correr Frontend y Backend al mismo tiempo
+Los pasos de construcción y despliegue fueron los siguientes:
 
-1. En la raíz del proyecto chilemon-showdown hacer
-
+1. En la carpeta de backend: 
 ```bash
-npm install
+npm run build:ui
+npm run build
+npm run seed
 ```
 
-2. Correr tanto frontend como backend con:
+2. Subir al servidor la carpeta backend:
 ```bash
-npm start
+scp -P219 -r backend fullstack@fullstack.dcc.uchile.cl:elpepesin/chilemon
 ```
 
-3. Estos correran en:
-    * Frontend → http://localhost:5173/
-
-    * Backend API → http://localhost:3001/
-
-# Correr el Frontend
-
-1. Ir al directorio frontend:
-
+3. Dentro del servidor 
 ```bash
-cd frontend
-```
-
-2. Instalar dependencias
-```bash
-npm install
-```
-
-3. Correr la aplicación
-```bash
-npm run dev
-```
-4. La aplicación estará disponible en:
-```bash
-http://localhost:5173/
-```
-
-# Correr el Backend
-
-1. Ir al directorio del backend
-```bash
-cd backtend
-```
-
-2. Instalar dependencias
-```bash
-npm install
-```
-
-3. Correr el servidor
-```bash
-npm start
-```
-
-4. El servidor estará disponible en:
-```bash
-http://localhost:3001/
+cd elpepesin/chilemon/backend
+npm i
+npm run start
 ```
