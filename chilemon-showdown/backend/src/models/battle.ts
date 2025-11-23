@@ -17,6 +17,7 @@ export interface IBattleChilemonState {
   // snapshot de referencia al slot del equipo
   refTeamIndex: number; // índice dentro de players[].team, de 1 a 6
   currentHP: number;
+  maxHP: number;
   status: Status;
   stages: {
     atk: Stage; def: Stage; spa: Stage; spd: Stage; spe: Stage;
@@ -62,6 +63,7 @@ const StagesSchema = new Schema<IBattleChilemonState["stages"]>({
 const ChilemonStateSchema = new Schema<IBattleChilemonState>({
   refTeamIndex: { type: Number, required: true },
   currentHP: { type: Number, required: true },
+  maxHP: { type: Number, required: true },
   status: { type: String, default: "none" },
   stages: { type: StagesSchema, default: () => ({}) },
   volatile: { type: Schema.Types.Mixed, default: {} },

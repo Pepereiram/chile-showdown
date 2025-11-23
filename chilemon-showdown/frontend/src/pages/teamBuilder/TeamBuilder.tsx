@@ -34,8 +34,7 @@ interface ExistingTeam {
 
 const TeamBuilder: React.FC = () => {
   const navigate = useNavigate();
-  
-  // All hooks at the top
+
   const [teamName, setTeamName] = useState("");
   const [selectedPlayers, setSelectedPlayers] = useState<PlayerDisplay[]>([]);
   const [availablePlayers, setAvailablePlayers] = useState<PlayerDisplay[]>([]);

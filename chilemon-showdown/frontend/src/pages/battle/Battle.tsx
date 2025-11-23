@@ -1,6 +1,6 @@
 // src/pages/battle/Battle.tsx
-import React, { use, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Navigate, useParams, useNavigate } from "react-router-dom";
 import battleService from "../../services/battle";
 import {
   Box,
@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  LinearProgress,
 } from "@mui/material";
 import { getMoveNameById } from "../../services/moves";
 
@@ -34,9 +35,8 @@ type BattlePlayer = {
   partyState: Array<{
     refTeamIndex: number;
     currentHP: number;
+    maxHP: number;
     status?: string;
-    // maxHP is not in the model yet, but we support it if added later:
-    maxHP?: number;
   }>;
   mustSwitch?: boolean;
 };
@@ -51,6 +51,7 @@ type BattleState = {
 
 export const Battle: React.FC = () => {
   const { battleId } = useParams<{ battleId: string }>();
+  const navigate = useNavigate();
 
   const [battle, setBattle] = useState<BattleState | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -93,13 +94,18 @@ export const Battle: React.FC = () => {
     const teamSlot = player.team[state.refTeamIndex];
     console.log("CHILEMON SLOT", teamSlot);
     const nickname = teamSlot?.nickname || `#${teamSlot?.chilemonId ?? "??"}`;
-    const maxHP = state.maxHP ?? state.currentHP ?? 100;
+    // Use a fixed default max HP (100) when the server doesn't provide it.
+    const DEFAULT_MAX_HP = 100;
+    const maxHP = state.maxHP ?? DEFAULT_MAX_HP;
+    // Clamp current HP between 0 and maxHP so it never exceeds the fixed maximum.
+    const currentHP = Math.max(0, Math.min(state.currentHP ?? 0, maxHP));
+
     return {
       // expose the chilemon id so callers can show the sprite
       id: teamSlot?.chilemonId,
       name: nickname,
       level: teamSlot?.level ?? 50,
-      hp: state.currentHP,
+      hp: currentHP,
       maxHP,
       status: state.status ?? "none",
       moves: teamSlot?.moves ?? [],
@@ -178,6 +184,8 @@ export const Battle: React.FC = () => {
       setSubmitting(true);
       const updated = await battleService.forfeitBattle(battleId, currentUserId);
       setBattle(updated);
+      // redirect to home after forfeit
+      navigate("/home");
     } catch (err: any) {
       setError(err?.message ?? "Error al rendirse");
     } finally {
@@ -207,9 +215,19 @@ export const Battle: React.FC = () => {
         <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
           <Stack spacing={1}>
             <Typography fontWeight={600}>{opp?.username ?? "Opponent"}</Typography>
-            {oppActive && (
-              <Typography variant="body2">{oppActive.name} • Lv {oppActive.level}</Typography>
-            )}
+              {oppActive && (
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 0.5 }}>
+                  <Typography variant="body2">{oppActive.name} • Lv {oppActive.level}</Typography>
+                  <Box sx={{ width: 160 }}>
+                    <LinearProgress
+                      variant="determinate"
+                      value={Math.max(0, Math.min(100, (oppActive.hp / (oppActive.maxHP || 1)) * 100))}
+                      sx={{ height: 10, borderRadius: 1 }}
+                    />
+                    <Typography variant="caption" color="text.secondary">{oppActive.hp} / {oppActive.maxHP}</Typography>
+                  </Box>
+                </Box>
+              )}
           </Stack>
 
           {/* Sprite image for opponent (uses chilemon id) */}
@@ -236,9 +254,19 @@ export const Battle: React.FC = () => {
 
           <Stack alignItems="flex-end" spacing={1}>
             <Typography fontWeight={600}>{me?.username ?? "You"}</Typography>
-            {myActive && (
-              <Typography variant="body2">{myActive.name} • Lv {myActive.level}</Typography>
-            )}
+              {myActive && (
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 0.5 }}>
+                  <Typography variant="body2">{myActive.name} • Lv {myActive.level}</Typography>
+                  <Box sx={{ width: 160 }}>
+                    <LinearProgress
+                      variant="determinate"
+                      value={Math.max(0, Math.min(100, (myActive.hp / (myActive.maxHP || 1)) * 100))}
+                      sx={{ height: 10, borderRadius: 1 }}
+                    />
+                    <Typography variant="caption" color="text.secondary">{myActive.hp} / {myActive.maxHP}</Typography>
+                  </Box>
+                </Box>
+              )}
           </Stack>
         </Box>
 

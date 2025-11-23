@@ -80,6 +80,7 @@ export async function initializePartyState(team: ITeamChilemon[]) {
     states.push({
       refTeamIndex: i,
       currentHP: totalHP,
+      maxHP: totalHP,
       status: "none",
       stages: { atk:0, def:0, spa:0, spd:0, spe:0, acc:0, eva:0 },
       volatile: {},
