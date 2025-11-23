@@ -127,7 +127,8 @@ export default function Profile() {
                     <ActiveBattleItem
                       key={id}
                       id={id}
-                      title={title + " (Finished)"}
+                      title={title}
+                      isFinished={true}
                     />
                   );
                 })

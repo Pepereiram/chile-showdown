@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom';
 interface Props {
   title?: string;
   id?: string | number;
+  isFinished?: boolean;
 }
 
-export default function ActiveBattleItem({ title, id }: Props) {
+export default function ActiveBattleItem({ title, id, isFinished }: Props) {
   const navigate = useNavigate();
 
   const handleSelect = () => {
@@ -27,7 +28,9 @@ export default function ActiveBattleItem({ title, id }: Props) {
         <Box sx={{ flex: 1 }}>
           <Typography>{title ?? 'Opponent'}</Typography>
         </Box>
-        <Button variant="contained" size="small" onClick={handleSelect}>Select Move</Button>
+        {!isFinished && (
+          <Button variant="contained" size="small" onClick={handleSelect}>Select Move</Button>
+        )}
       </Box>
     </Paper>
   );
