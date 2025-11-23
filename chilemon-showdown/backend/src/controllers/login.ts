@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
     sameSite: "lax",
   });
 
-  return res.status(200).send({ username: user.username });
+  return res.status(200).send({ id: user._id.toString(), username: user.username });
 });
 
 
@@ -40,7 +40,7 @@ router.post("/", async (req, res) => {
  * Obtener datos del usuario logeado
  */
 router.get("/me", authenticate, async (request, response) => {
-  const user = await User.findById((request as any).userId);
+  const user = await User.findById(request.userId);
   return response.status(200).json(user);
 });
 

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import TeamBuilder from './pages/teamBuilder/TeamBuilder';
 import Home from './pages/home/Home';
 import Profile from './pages/profile/Profile';
+import { Battle } from './pages/battle/Battle';
 import Navtab from './components/Navtab';
 
 const App: React.FC = () => {
@@ -25,6 +26,7 @@ const App: React.FC = () => {
               <Route path="/home" element={<Home />} />
               <Route path="/team-builder" element={<TeamBuilder />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/battle/:battleId" element={<Battle />} />
         </Routes>
       </div>
     </BrowserRouter>

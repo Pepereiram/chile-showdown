@@ -5,6 +5,8 @@ import type { Team } from "../../types/Team";
 import type { TeamChilemon } from "../../types/TeamChilemon";
 import ButtonLink from "../../components/ButtonLink";
 import TeamSelector from "../../components/TeamSelector";
+import { createBattle } from '../../services/battle';
+import { useNavigate } from 'react-router-dom';
 
 type TeamView = {
   id: string;
@@ -15,10 +17,9 @@ type TeamView = {
 
 export default function Home() {
   const storedUser = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const user: { id: number; username: string; password: string } | null =
-    storedUser ? JSON.parse(storedUser) : null; // mock user para test
+  const user: { id: number; username: string; password: string }=JSON.parse(storedUser!); // mock user para test
   // este debería ser un usuario autenticado pero setiene que implementar auth primero
-
+  console.log("Usuario en Home:", user.id, user.username, user.password);
   // Definimos los estados
   const [teams, setTeams] = useState<TeamView[]>([]);
   const [selectedTeam, setSelectedTeam] = useState<TeamView | null>(null);
@@ -70,6 +71,27 @@ export default function Home() {
     load();
   }, [user?.id]);
   console.log(teams);
+  const navigate = useNavigate();
+
+  const handleBattleCreation = async () => {
+    // Use frontend service to create/join a battle and navigate to Battle page
+    if (!selectedTeam) {
+      console.warn('No team selected');
+      return;
+    }
+    try {
+      const userId = (user?.id || '') as string;
+      const res = await createBattle(userId, selectedTeam.id);
+      const id = (res as any)._id ?? (res as any).id;
+      console.log("Created battle with ID:", id);
+      if (id) {
+        // navigate to battle page with query param
+        navigate(`/battle/${id}`);
+      }
+    } catch (err) {
+      console.error('Error creating battle via service', err);
+    }
+  };
 
   return (
     <>
@@ -91,7 +113,9 @@ export default function Home() {
               }
             />
 
-            <ButtonLink route="battle/" text="Battle with Selected Team" />
+            <button className="btn-primary px-4 py-2 rounded" onClick={handleBattleCreation}>
+              Battle with Selected Team
+            </button>
 
             {teams.length === 0 && (
               <div className="text-gray-500 text-sm mt-2">

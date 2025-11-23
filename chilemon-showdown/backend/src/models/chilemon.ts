@@ -6,7 +6,7 @@ interface Ability {
     slot: number;
 }
 
-interface Stat {
+export interface Stat {
     name: string;
     base_value: number;
 }
@@ -15,7 +15,8 @@ interface Type {
     type: string;
     slot: number;
 }
-interface IChilemon {
+
+export interface IChilemon {
     id: number; // ID especie
     name: string;
     abilities: Ability[];

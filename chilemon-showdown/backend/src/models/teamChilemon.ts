@@ -1,8 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 
-interface ITeamChilemon {
+export interface ITeamChilemon {
   teamId: mongoose.Types.ObjectId;
-  pokemonId: number;
+  chilemonId: number;
   position: number;
   nickname: string;
   level: number;
@@ -13,7 +13,7 @@ interface ITeamChilemon {
 const teamChilemonSchema = new Schema<ITeamChilemon>(
   {
     teamId: { type: Schema.Types.ObjectId, ref: 'Team', required: true },
-    pokemonId: { type: Number, required: true },
+    chilemonId: { type: Number, required: true },
     position: { type: Number, required: true },
     nickname: { type: String, required: true, trim: true },
     level: { type: Number, default: 100 },
