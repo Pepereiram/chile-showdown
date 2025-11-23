@@ -65,7 +65,7 @@ router.post("/battles", async (req, res) => { // IMPORTANTE: AGREGAR AUTENTICACI
 
     const waiting = await Battle.findOne({
         status: "waiting",
-        "player.0.userId:": {$ne: meId},
+        "players.0.userId:": {$ne: meId},
         "players.1": {$exists: false},
     }).exec()
 
@@ -137,9 +137,9 @@ router.post("/battles/:id/switch", authenticate, async (req, res) => {
     const meId = user._id.toString()
 
     const toIndexNumber = Number(toIndex);
-    if (!Number.isFinite(toIndexNumber)) throw new Error("moveId inválido");
+    if (!Number.isFinite(toIndexNumber)) throw new Error("toIndex inválido");
     
-    await engine.submitMove(battle, meId, toIndexNumber);
+    await engine.submitSwitch(battle, meId, toIndexNumber);
     await battle.save();
 
     return res.json(battle);
