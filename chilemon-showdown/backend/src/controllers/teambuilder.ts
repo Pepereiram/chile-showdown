@@ -107,16 +107,15 @@ router.put("/teams/:id", authenticate, async (req, res) => {
 
       await TeamChilemon.deleteMany({ teamId: team._id });
 
-      const teamMembers = members.map((pokemonId: number, index: number) => ({
+      const teamMembers: ITeamChilemon[] = members.map((member: { pokemonId: number; moves: number[] }, index: number) => ({
         teamId: team._id,
-        chilemonId: pokemonId,
+        chilemonId: member.pokemonId,
         position: index,
-        nickname: `Pokemon${pokemonId}`,
+        nickname: `Pokemon${member.pokemonId}`,
         level: 100,
-        moves: [],
+        moves: member.moves || [],
         effort: []
       }));
-
       await TeamChilemon.insertMany(teamMembers);
     }
 
