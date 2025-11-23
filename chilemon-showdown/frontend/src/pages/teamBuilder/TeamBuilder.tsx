@@ -21,6 +21,8 @@ interface PlayerDisplay {
   id: number;
   name: string;
   avatar: string;
+  selectedMoves?: number[];  
+  availableMoves?: number[]; // IDs de movimientos disponibles
 }
 
 interface ExistingTeam {
@@ -46,13 +48,22 @@ const TeamBuilder: React.FC = () => {
     headers: { "X-CSRF-Token": localStorage.getItem("csrf") || "" },
   }), []);
 
+
+  const getRandomMoves = useCallback((availableMoves: number[], count: number = 4): number[] => {
+    if (!availableMoves || availableMoves.length === 0) return [];
+    
+    const shuffled = [...availableMoves].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, Math.min(count, shuffled.length));
+  }, []);
+
   const loadAvailableChilemon = useCallback(async () => {
     try {
       const response = await axios.get<Chilemon[]>("http://localhost:3001/chilemon");
       const players: PlayerDisplay[] = response.data.map(chilemon => ({
         id: chilemon.id,
         name: chilemon.name,
-        avatar: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${chilemon.id}.png`
+        avatar: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${chilemon.id}.png`,
+        availableMoves: chilemon.moves || [] 
       }));
       setAvailablePlayers(players);
     } catch (error) {
@@ -122,6 +133,7 @@ const TeamBuilder: React.FC = () => {
     setError("");
   }, []);
 
+
   const handleAddPlayer = useCallback((player: PlayerDisplay) => {
     if (selectedPlayers.length >= 6) {
       setError("No puedes agregar más de 6 Chilemon a tu equipo.");
@@ -131,9 +143,15 @@ const TeamBuilder: React.FC = () => {
       setError("Este Chilemon ya está en tu equipo.");
       return;
     }
-    setSelectedPlayers(prev => [...prev, player]);
+    
+    const randomMoves = getRandomMoves(player.availableMoves || [], 4);
+    
+    setSelectedPlayers(prev => [...prev, {
+      ...player,
+      selectedMoves: randomMoves, 
+    }]);
     setError("");
-  }, [selectedPlayers]);
+  }, [selectedPlayers, getRandomMoves]);
 
   const handleRemovePlayer = useCallback((playerId: number) => {
     setSelectedPlayers(prev => prev.filter(p => p.id !== playerId));
@@ -179,16 +197,22 @@ const TeamBuilder: React.FC = () => {
         return;
       }
 
+      // Envía los movimientos junto con el ID
+      const membersData = selectedPlayers.map(p => ({
+        pokemonId: p.id,
+        moves: p.selectedMoves || []  
+      }));
+
       if (activeTeamId) {
         await axios.put(`http://localhost:3001/api/teams/${activeTeamId}`, {
           name: teamName,
-          members: selectedPlayers.map(p => p.id)
+          members: membersData  
         }, auth());
         window.alert("¡Equipo actualizado exitosamente!");
       } else {
         await axios.post("http://localhost:3001/api/teams", {
           name: teamName,
-          members: selectedPlayers.map(p => p.id)
+          members: membersData  
         }, auth());
         window.alert("¡Equipo creado exitosamente!");
       }

@@ -64,13 +64,14 @@ router.post("/teams", authenticate, async (req, res) => {
     const team = new Team({ userId, name });
     const savedTeam = await team.save();
 
-    const teamMembers = members.map((pokemonId: number, index: number) => ({
+    // Ahora members es un array de objetos { pokemonId, moves }
+    const teamMembers = members.map((member: { pokemonId: number; moves: number[] }, index: number) => ({
       teamId: savedTeam._id,
-      pokemonId,
+      pokemonId: member.pokemonId,
       position: index,
-      nickname: `Pokemon${pokemonId}`,
+      nickname: `Pokemon${member.pokemonId}`,
       level: 100,
-      moves: [],
+      moves: member.moves || [],  // ← Usa los movimientos recibidos
       effort: []
     }));
 
