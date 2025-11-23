@@ -1,7 +1,9 @@
 import { IPlayer, IBattleChilemonState } from '../../models/battle';
 import { ITeamChilemon } from '../../models/teamChilemon';
 import { IChilemon } from '../../models/chilemon';
-import Move, { IMove } from '../../models/moves';
+import { IMove } from '../../models/moves';
+import * as fs from 'fs';
+import * as path from 'path';
 import Chilemon from '../../models/chilemon';
 import {Stat} from '../../models/chilemon';
 
@@ -122,8 +124,10 @@ let movesLoaded = false;
 
 async function loadMovesFromDB() {
   if (movesLoaded) return;
-
-  const moves = (await Move.find().lean()) as IMove[];
+  // Load moves from the static JSON file in backend/data/moves.json
+  const filePath = path.join(__dirname, "../../../data/moves.json");
+  const raw = await fs.promises.readFile(filePath, "utf-8");
+  const moves = JSON.parse(raw) as IMove[];
 
   for (const m of moves) {
     const mv: IMove = {
