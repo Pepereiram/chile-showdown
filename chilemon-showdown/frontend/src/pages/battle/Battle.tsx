@@ -1,9 +1,21 @@
 // src/pages/battle/Battle.tsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { HealthBar } from "../../components/HealthBar";
-import type { HealthBarHandle } from "../../components/HealthBar";
 import battleService from "../../services/battle";
+import {
+  Box,
+  Button,
+  Typography,
+  Paper,
+  Stack,
+  Avatar,
+  ToggleButton,
+  ToggleButtonGroup,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from "@mui/material";
 
 type BattlePlayer = {
   userId: string;
@@ -40,7 +52,6 @@ export const Battle: React.FC = () => {
   const { battleId } = useParams<{ battleId: string }>();
 
   const [battle, setBattle] = useState<BattleState | null>(null);
-  const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedPanel, setSelectedPanel] = useState<"moves" | "switch" | null>(
@@ -79,9 +90,12 @@ export const Battle: React.FC = () => {
     const state = player.partyState[player.activeIndex];
     if (!state) return null;
     const teamSlot = player.team[state.refTeamIndex];
+    console.log("CHILEMON SLOT", teamSlot);
     const nickname = teamSlot?.nickname || `#${teamSlot?.chilemonId ?? "??"}`;
     const maxHP = state.maxHP ?? state.currentHP ?? 100;
     return {
+      // expose the chilemon id so callers can show the sprite
+      id: teamSlot?.chilemonId,
       name: nickname,
       level: teamSlot?.level ?? 50,
       hp: state.currentHP,
@@ -102,8 +116,7 @@ export const Battle: React.FC = () => {
 
     const loadBattle = async () => {
       try {
-        setLoading(true);
-        setError(null);
+          setError(null);
         const data = await battleService.getBattle(battleId, currentUserId || undefined);
         if (!cancelled) {
           setBattle(data);
@@ -111,7 +124,7 @@ export const Battle: React.FC = () => {
       } catch (err: any) {
         if (!cancelled) setError(err?.message ?? "Error al cargar la batalla");
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {/* loading state removed */}
       }
     };
 
@@ -172,168 +185,134 @@ export const Battle: React.FC = () => {
   }
 
   return (
-    <div className="battle-page flex h-full">
+    <Box sx={{ display: "flex", height: "100%" }}>
       {/* LEFT: Battle arena */}
-      <div className="battle-arena flex-1 flex flex-col items-center justify-between relative p-6">
+      <Box sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", position: "relative", p: 3 }}>
         {/* Turn + status */}
-        <div className="w-full flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+          <Typography variant="h6">
             {battle ? `Turn ${battle.turn}` : "Loading battle..."}
-          </h2>
+          </Typography>
           {battle && (
-            <span className="text-sm uppercase">
+            <Typography variant="caption" sx={{ textTransform: "uppercase" }}>
               {battle.status === "waiting" && "Waiting for opponent"}
               {battle.status === "in-progress" && "In progress"}
               {battle.status === "finished" && "Battle finished"}
-            </span>
+            </Typography>
           )}
-        </div>
+        </Box>
 
         {/* Opponent side (top) */}
-        <div className="w-full flex justify-between items-center mb-8">
-          <div className="flex flex-col gap-2">
-            <span className="font-semibold">
-              {opp?.username ?? "Opponent"}
-            </span>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
+          <Stack spacing={1}>
+            <Typography fontWeight={600}>{opp?.username ?? "Opponent"}</Typography>
             {oppActive && (
-              <span className="text-sm">
-                {oppActive.name} • Lv {oppActive.level}
-              </span>
+              <Typography variant="body2">{oppActive.name} • Lv {oppActive.level}</Typography>
             )}
-            {oppActive && (
-              <HealthBar
-                // using key so it resets when active changes
-                key={`opp-${opp?.userId}-${opp?.activeIndex}`}
-                maxHealth={oppActive.maxHP}
-                initial={oppActive.hp}
-                position="top-right"
-              />
-            )}
-          </div>
-          {/* Placeholder sprite / image */}
-          <div className="enemy-sprite w-40 h-40 bg-gray-200 rounded-full" />
-        </div>
+          </Stack>
+
+          {/* Sprite image for opponent (uses chilemon id) */}
+          <Avatar
+            variant="circular"
+            src={oppActive?.id ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${oppActive.id}.png` : undefined}
+            alt={oppActive?.name ?? "opponent"}
+            sx={{ width: 96, height: 96, bgcolor: "grey.200" }}
+          />
+        </Box>
 
         {/* Center explosion / background */}
-        <div className="battle-background absolute inset-0 pointer-events-none opacity-20">
-          {/* here you can put the explosion image via CSS background */}
-        </div>
+        <Box sx={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.2 }} />
 
         {/* Player side (bottom) */}
-        <div className="w-full flex justify-between items-center mt-8">
-          {/* Placeholder sprite / image */}
-          <div className="player-sprite w-40 h-40 bg-gray-200 rounded-full" />
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", mt: 4 }}>
+          {/* Sprite image for player (uses chilemon id) */}
+          <Avatar
+            variant="circular"
+            src={myActive?.id ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${myActive.id}.png` : undefined}
+            alt={myActive?.name ?? "you"}
+            sx={{ width: 96, height: 96, bgcolor: "grey.200" }}
+          />
 
-          <div className="flex flex-col items-end gap-2">
-            <span className="font-semibold">
-              {me?.username ?? "You"}
-            </span>
+          <Stack alignItems="flex-end" spacing={1}>
+            <Typography fontWeight={600}>{me?.username ?? "You"}</Typography>
             {myActive && (
-              <span className="text-sm">
-                {myActive.name} • Lv {myActive.level}
-              </span>
+              <Typography variant="body2">{myActive.name} • Lv {myActive.level}</Typography>
             )}
-            {myActive && (
-              <HealthBar
-                key={`me-${me?.userId}-${me?.activeIndex}`}
-                maxHealth={myActive.maxHP}
-                initial={myActive.hp}
-                position="bottom-left"
-              />
-            )}
-          </div>
-        </div>
+          </Stack>
+        </Box>
 
         {/* Action buttons */}
-        <div className="w-full mt-6 flex flex-col items-center gap-3">
-          <div className="flex gap-3 mb-2">
-            <button
-              className={`px-4 py-2 rounded ${
-                selectedPanel === "moves" ? "bg-blue-600 text-white" : "bg-gray-200"
-              }`}
-              onClick={() => setSelectedPanel("moves")}
+        <Box sx={{ width: "100%", mt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+          <Stack direction="row" spacing={2} mb={1}>
+            <ToggleButtonGroup
+              value={selectedPanel}
+              exclusive
+              onChange={(_, val) => setSelectedPanel(val)}
+              size="small"
             >
-              Moves
-            </button>
-            <button
-              className={`px-4 py-2 rounded ${
-                selectedPanel === "switch" ? "bg-blue-600 text-white" : "bg-gray-200"
-              }`}
-              onClick={() => setSelectedPanel("switch")}
-            >
-              Switch
-            </button>
-            <button
-              className="px-4 py-2 rounded bg-red-500 text-white"
-              onClick={handleForfeit}
-              disabled={submitting}
-            >
-              Forfeit
-            </button>
-          </div>
+              <ToggleButton value="moves">Moves</ToggleButton>
+              <ToggleButton value="switch">Switch</ToggleButton>
+            </ToggleButtonGroup>
+
+            <Button variant="contained" color="error" onClick={handleForfeit} disabled={submitting}>Forfeit</Button>
+          </Stack>
 
           {/* Panel content: moves or switch options */}
-          <div className="w-full max-w-md p-4 border rounded bg-white/80">
+          <Paper sx={{ width: "100%", maxWidth: 520, p: 2, bgcolor: "rgba(255,255,255,0.9)" }}>
             {selectedPanel === "moves" && (
-              <div className="grid grid-cols-2 gap-2">
+              <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 1 }}>
                 {myActive?.moves && myActive.moves.length > 0 ? (
                   myActive.moves.map((moveId) => (
-                    <button
-                      key={moveId}
-                      className="px-3 py-2 rounded bg-blue-500 text-white text-sm"
-                      disabled={submitting}
-                      onClick={() => handleMoveClick(moveId)}
-                    >
-                      {/* TODO: replace with real move names once we have them */}
-                      Move #{moveId}
-                    </button>
+                    <Box key={moveId}>
+                      <Button fullWidth variant="contained" color="primary" size="small" disabled={submitting} onClick={() => handleMoveClick(moveId)}>
+                        Move #{moveId}
+                      </Button>
+                    </Box>
                   ))
                 ) : (
-                  <p className="text-sm text-gray-500">
-                    No moves available for this Chilemon.
-                  </p>
+                  <Typography variant="body2" color="text.secondary">No moves available for this Chilemon.</Typography>
                 )}
-              </div>
+              </Box>
             )}
 
             {selectedPanel === "switch" && me && (
-              <div className="grid grid-cols-3 gap-2">
+              <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1 }}>
                 {me.team.map((slot, idx) => (
-                  <button
-                    key={idx}
-                    className="px-2 py-2 rounded bg-green-500 text-white text-xs"
-                    disabled={submitting || idx === me.activeIndex}
-                    onClick={() => handleSwitchClick(idx)}
-                  >
-                    {slot.nickname || `Slot ${idx + 1}`}
-                  </button>
+                  <Box key={idx}>
+                    <Button fullWidth variant="contained" color="success" size="small" disabled={submitting || idx === me.activeIndex} onClick={() => handleSwitchClick(idx)}>
+                      {slot.nickname || `Slot ${idx + 1}`}
+                    </Button>
+                  </Box>
                 ))}
-              </div>
+              </Box>
             )}
-          </div>
 
-          {error && (
-            <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
-          )}
-        </div>
-      </div>
+            {error && (
+              <Typography mt={1} variant="body2" color="error" align="center">{error}</Typography>
+            )}
+          </Paper>
+        </Box>
+      </Box>
 
       {/* RIGHT: Log panel */}
-      <div className="battle-log-panel w-72 border-l p-4 flex flex-col bg-white">
-        <h3 className="font-bold mb-2">Log</h3>
-        <div className="flex-1 overflow-y-auto border rounded p-2 bg-gray-50 text-sm">
+      <Paper elevation={0} sx={{ width: 288, borderLeft: 1, borderColor: "divider", p: 2, display: "flex", flexDirection: "column", bgcolor: "background.paper" }}>
+        <Typography fontWeight={700} mb={1}>Log</Typography>
+        <Divider />
+        <Box sx={{ flex: 1, overflowY: "auto", mt: 1 }}>
           {battle?.log && battle.log.length > 0 ? (
-            battle.log.map((line, i) => (
-              <div key={i} className="mb-1">
-                {line}
-              </div>
-            ))
+            <List dense>
+              {battle.log.map((line, i) => (
+                <ListItem key={i} disablePadding>
+                  <ListItemText primary={line} />
+                </ListItem>
+              ))}
+            </List>
           ) : (
-            <p className="text-gray-400">No events yet.</p>
+            <Typography variant="body2" color="text.secondary">No events yet.</Typography>
           )}
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 

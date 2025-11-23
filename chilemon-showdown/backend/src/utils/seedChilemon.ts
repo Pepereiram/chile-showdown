@@ -14,7 +14,7 @@ async function seedChilemon() {
   }
 
   const chilemonData = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../../data/chilemon.json"), "utf-8")
+    fs.readFileSync(path.join(__dirname, "../../data/chilemon_chileizados.json"), "utf-8")
   );
 
   try {
