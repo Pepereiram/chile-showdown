@@ -14,6 +14,8 @@ En esta aplicación web, el usuario será capaz de crear su propio equipo de chi
 contra personas de todo el país!
 
 ## Estructura del Estado Global
+Se utiliza zustand para la gestión del estado global en la aplicación frontend. 
+Se definen tres stores principales para manejar los estados de las batallas: pendientes, en curso y finalizadas. Pendientes almacena las batallas que están esperando a que los jugadores se unan, en curso contiene las batallas activas donde los jugadores están participando, y finalizadas guarda las batallas que ya han concluido.
 
 ## Mapa de rutas y flujo de autenticación
 
