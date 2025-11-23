@@ -1,5 +1,5 @@
 // src/pages/battle/Battle.tsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { use, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import battleService from "../../services/battle";
 import {
@@ -16,6 +16,7 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
+import { getMoveNameById } from "../../services/moves";
 
 type BattlePlayer = {
   userId: string;
@@ -117,7 +118,7 @@ export const Battle: React.FC = () => {
     const loadBattle = async () => {
       try {
           setError(null);
-        const data = await battleService.getBattle(battleId, currentUserId || undefined);
+        const data = await battleService.getBattle(battleId, currentUserId);
         if (!cancelled) {
           setBattle(data);
         }
@@ -160,7 +161,7 @@ export const Battle: React.FC = () => {
     if (!battleId || submitting) return;
     try {
       setSubmitting(true);
-      const updated = await battleService.submitSwitch(battleId, toIndex);
+      const updated = await battleService.submitSwitch(battleId, toIndex, currentUserId);
       setBattle(updated);
     } catch (err: any) {
       setError(err?.message ?? "Error al cambiar de Chilemon");
@@ -175,7 +176,7 @@ export const Battle: React.FC = () => {
 
     try {
       setSubmitting(true);
-      const updated = await battleService.forfeitBattle(battleId);
+      const updated = await battleService.forfeitBattle(battleId, currentUserId);
       setBattle(updated);
     } catch (err: any) {
       setError(err?.message ?? "Error al rendirse");
@@ -265,7 +266,7 @@ export const Battle: React.FC = () => {
                   myActive.moves.map((moveId) => (
                     <Box key={moveId}>
                       <Button fullWidth variant="contained" color="primary" size="small" disabled={submitting} onClick={() => handleMoveClick(moveId)}>
-                        Move #{moveId}
+                        {getMoveNameById(moveId) || `Move #${moveId}`}
                       </Button>
                     </Box>
                   ))

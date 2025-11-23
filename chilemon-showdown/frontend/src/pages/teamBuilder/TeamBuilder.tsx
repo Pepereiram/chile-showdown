@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { isPowerNull } from "../../services/moves";
 import {
   Box,
   Button,
@@ -51,8 +52,12 @@ const TeamBuilder: React.FC = () => {
 
   const getRandomMoves = useCallback((availableMoves: number[], count: number = 4): number[] => {
     if (!availableMoves || availableMoves.length === 0) return [];
-    
-    const shuffled = [...availableMoves].sort(() => Math.random() - 0.5);
+
+    // Filter out moves whose `power` is null
+    const validMoves = availableMoves.filter(id => !isPowerNull(id));
+    if (validMoves.length === 0) return [];
+
+    const shuffled = [...validMoves].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, Math.min(count, shuffled.length));
   }, []);
 
