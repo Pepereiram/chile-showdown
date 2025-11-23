@@ -48,8 +48,14 @@ export const Battle: React.FC = () => {
   );
 
   // In a real app you'd probably take this from auth context.
-  const currentUserId = localStorage.getItem("userId") || "";
+  const currentUser = localStorage.getItem("user");
 
+  if (!currentUser) {
+    return <div>Please log in to view the battle.</div>;
+  }
+
+  const parsedUser = JSON.parse(currentUser);
+  const currentUserId = parsedUser.id;
   // Figure out which side is "me" and which is the opponent
   const { me, opp } = useMemo(() => {
     if (!battle || battle.players.length === 0) {
@@ -98,7 +104,7 @@ export const Battle: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await battleService.getBattle(battleId);
+        const data = await battleService.getBattle(battleId, currentUserId || undefined);
         if (!cancelled) {
           setBattle(data);
         }
