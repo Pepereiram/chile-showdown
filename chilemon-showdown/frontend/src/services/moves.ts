@@ -1,4 +1,4 @@
-import moves from "../../public/moves.json";
+import moves from "../data/moves.json";
 
 export function getMoveById(moveId: number) {
   return moves.find((move) => move.id === moveId) || null;
