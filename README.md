@@ -79,7 +79,12 @@ Los tests E2E cubren los principales flujos de la gestión de equipos (Team Buil
 4. Delete: Crea un equipo, configura Playwright para aceptar automáticamente la ventana de confirmación, y luego hace clic en el botón de eliminar asociado al equipo en la barra lateral. Se confirma que el equipo ya no sea visible en la barra lateral, verificando también el conteo de elementos con dicho nombre sea 0.
 
 
-## Desiciones de diseño y librerías de estilos
+## Librería de estilos y decisiones de diseño
+
+### Material UI
+
+En el frontend se utilizó Material UI (MUI) como librería principal de componentes de interfaz. MUI provee componentes preconstruidos como Box, Button, TextField, Typography, Paper, IconButton, Alert y Avatar, que permiten mantener una línea visual consistente y un diseño responsive. Además, se incorporaron los íconos de @mui/icons-material (por ejemplo, SaveIcon, AddIcon, ArrowBackIcon y CloseIcon) para reforzar visualmente las acciones principales de la interfaz (guardar, volver, eliminar, etc.).
+
 
 ## Despliegue de la aplicación
 
