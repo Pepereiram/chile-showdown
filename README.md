@@ -47,7 +47,8 @@ Se definen tres stores principales para manejar los estados de las batallas: pen
  │     ├── /battles/:id/move    (GET)     - Obtener todos los equipos del usuario
  │     ├── /battles/:id/switch  (GET)     - Obtener todos los equipos del usuario
  │     └── /battles/:id/forfeit (GET)     - Obtener todos los equipos del usuario
-
+ ├── /testing
+ │     ├── /reset               (POST)    - Reinicia la base de datos para el testing E2E
  ```
 
 ### Flujo de autenticación
