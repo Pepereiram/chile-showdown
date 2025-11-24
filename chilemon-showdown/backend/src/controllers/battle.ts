@@ -176,7 +176,7 @@ router.post("/battles/:id/forfeit", async (req, res) => {
         return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    const meId = user._id; // Si en testing el "rival" al otro lado se rinde, y en pantalla se llega a mostrar que el usuario se rindio, debe ser por esto
+    const meId = user._id;
 
     const rivalId = battle.players[0].userId.equals(meId)
             ? battle.players[1].userId
@@ -184,7 +184,7 @@ router.post("/battles/:id/forfeit", async (req, res) => {
 
     battle.status = "finished";
     battle.winner = rivalId;
-    battle.log.push("El jugador se rindió.");
+    battle.log.push(`${user.username} se rindió. ${battle.players.find(p => p.userId.equals(rivalId))?.username} gana!`);
     await battle.save();
 
     res.json(battle);

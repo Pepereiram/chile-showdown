@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography';
 import { Column, ActiveBattleItem, UserName } from '../../components/profile';
 import { useEffect } from "react";
 import { useBattleStore } from "../../store/battleStore";
+import type { BattleSummary } from "../../services/battle";
 
 export default function Profile() {
   const user = localStorage.getItem('user')
@@ -18,9 +19,10 @@ export default function Profile() {
     error 
   } = useBattleStore();
 
-  const activeBattles = getActiveBattles();
-  const pendingBattles = getPendingBattles();
-  const finishedBattles = getFinishedBattles();
+const activeBattles: BattleSummary[] = getActiveBattles();
+const pendingBattles: BattleSummary[] = getPendingBattles();
+const finishedBattles: BattleSummary[] = getFinishedBattles();
+
   
   if (!user) {
     return <Box sx={{ p: 3 }}>Please log in to view your profile.</Box>;
