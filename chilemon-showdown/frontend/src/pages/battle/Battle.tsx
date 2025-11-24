@@ -286,6 +286,7 @@ export const Battle: React.FC = () => {
 
             {/* Sprite image for opponent (uses chilemon id) */}
             <Avatar
+              src={oppActive?.id ? `/sprites/${oppActive.id}.png` : undefined}
               variant="circular"
               alt={oppActive?.name ?? "opponent"}
               sx={{ width: 96, height: 96, bgcolor: "grey.200" }}
@@ -299,6 +300,7 @@ export const Battle: React.FC = () => {
           <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", mt: 4 }}>
             {/* Sprite image for player (uses chilemon id) */}
             <Avatar
+              src={myActive?.id ? `/sprites/${myActive.id}.png` : undefined}
               variant="circular"
               alt={myActive?.name ?? "you"}
               sx={{ width: 96, height: 96, bgcolor: "grey.200" }}
@@ -375,13 +377,39 @@ export const Battle: React.FC = () => {
           </Box>
         </Box>
 
-        {/* RIGHT: Log panel */}
-        <Paper elevation={0} sx={{ width: 288, borderLeft: 1, borderColor: "divider", p: 2, display: "flex", flexDirection: "column", bgcolor: "background.paper" }}>
+        {/* RIGHT: Log panel (fixed size with internal scroll) */}
+        <Paper
+          elevation={0}
+          sx={{
+            width: 288,
+            flex: '0 0 288px',
+            borderLeft: 1,
+            borderColor: 'divider',
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            bgcolor: 'background.paper',
+            boxSizing: 'border-box',
+            height: 'calc(100vh - 64px)',
+            overflow: 'hidden',
+          }}
+        >
           <Typography fontWeight={700} mb={1}>Log</Typography>
           <Divider />
-          <Box sx={{ flex: 1, overflowY: "auto", mt: 1 }}>
+          <Box
+            sx={{
+              flex: 1,
+              overflowY: 'auto',
+              mt: 1,
+              pr: 1,
+              // visible custom scrollbar for the log panel
+              '&::-webkit-scrollbar': { width: '8px' },
+              '&::-webkit-scrollbar-thumb': { bgcolor: '#c0c0c0', borderRadius: '4px' },
+              '&::-webkit-scrollbar-track': { bgcolor: 'transparent' },
+            }}
+          >
             {battle?.log && battle.log.length > 0 ? (
-              <List dense>
+              <List dense sx={{ p: 0 }}>
                 {battle.log.map((line, i) => (
                   <ListItem key={i} disablePadding>
                     <ListItemText primary={line} />
