@@ -4,14 +4,15 @@
   "description": "Backend for Chilemon Showdown using Express, TypeScript, and Mongoose",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/index.ts",
+    "dev": "cross-env NODE_ENV=development ts-node-dev --respawn src/index.ts",
     "build": "tsc",
     "start:test": "cross-env NODE_ENV=test npm run seed && ts-node-dev --respawn src/index.ts",
     "seed": "node dist/utils/seedChilemon.js",
     "seed:dev": "npx ts-node src/utils/seedChilemon.ts",
     "start": "node dist/index.js",
     "clean": "rimraf dist",
-    "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend"
+    "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
+    "build:uiw": "if exist dist rmdir /s /q dist && cd ../frontend && npm run build && xcopy dist ..\\backend\\dist /e /i /y"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
