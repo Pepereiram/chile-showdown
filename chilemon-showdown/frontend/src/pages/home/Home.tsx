@@ -125,7 +125,6 @@ export default function Home() {
         </Typography>
 
         <Stack spacing={2} alignItems="center" sx={{ width: "100%" }}>
-          <ButtonLink route="random-battle" text="Random Battle" fullWidth />
 
           <ButtonLink route="team-builder" text="Team Builder" fullWidth />
 
@@ -137,9 +136,7 @@ export default function Home() {
             }
           />
 
-          <button className="btn-primary px-4 py-2 rounded" onClick={handleBattleCreation}>
-              Battle with Selected Team
-            </button>
+          <ButtonLink text="Battle with Selected Team" onClick={handleBattleCreation} />
 
           {teams.length === 0 && (
             <Typography
@@ -150,8 +147,6 @@ export default function Home() {
               No tienes equipos todavía.
             </Typography>
           )}
-
-          <ButtonLink route="profile" text="Edit Profile" fullWidth />
         </Stack>
       </Paper>
     </Container>

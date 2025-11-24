@@ -66,7 +66,7 @@ const TeamBuilder: React.FC = () => {
       const players: PlayerDisplay[] = response.data.map(chilemon => ({
         id: chilemon.id,
         name: chilemon.name,
-        avatar: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${chilemon.id}.png`,
+        avatar: `/sprites/${chilemon.id}.png`,
         availableMoves: chilemon.moves || [] 
       }));
       setAvailablePlayers(players);
@@ -98,7 +98,7 @@ const TeamBuilder: React.FC = () => {
             return chilemon ? {
               id: chilemon.id,
               name: chilemon.name,
-              avatar: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${chilemon.id}.png`
+              avatar: `/sprites/${chilemon.id}.png`
             } : null;
           }).filter(Boolean);
 

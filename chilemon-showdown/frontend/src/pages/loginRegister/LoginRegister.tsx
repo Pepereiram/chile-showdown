@@ -28,7 +28,7 @@ const LoginRegister: React.FC = () => {
 
     try {
       const res = await axios.post<LoginResponse>(
-        "http://localhost:3001/api/login",
+        "/api/login",
         { username, password },
         { withCredentials: true }
       );
@@ -58,7 +58,7 @@ const LoginRegister: React.FC = () => {
 
     try {
       const { data } = await axios.get<LoginData[]>(
-        "http://localhost:3001/api/users",
+        "/api/users",
         { params: { username } }
       );
 
@@ -68,7 +68,7 @@ const LoginRegister: React.FC = () => {
         return;
       }
 
-      await axios.post("http://localhost:3001/api/users", {
+      await axios.post("/api/users", {
         username,
         password,
       });
