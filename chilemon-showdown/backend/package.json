@@ -8,7 +8,7 @@
     "build": "tsc",
     "seed": "npx ts-node src/utils/seedChilemon.ts",
     "start": "npm run build && npm run seed && node dist/index.js",
-    "start:test": "cross-env NODE_ENV=test ts-node-dev src/index.ts",
+    "start:test": "cross-env NODE_ENV=test npm run seed && ts-node-dev --respawn src/index.ts",
     "clean": "rimraf dist",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend"
   },
