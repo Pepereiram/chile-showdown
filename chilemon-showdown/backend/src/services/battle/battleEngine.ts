@@ -120,7 +120,7 @@ export class BattleEngine {
     }
 
     private async compareActions(p1: IPlayer, a1: IAction, p2: IPlayer, a2: IAction) {
-
+        await battleHelpers.ensureMovesLoaded();
         const key = async (p: IPlayer, a: IAction) => {
             if (a.kind === "switch") return { pri: SWITCH_PRIORITY, spe: 0 };
             const move = battleHelpers.getMoveData((a as IActionMove).moveId);

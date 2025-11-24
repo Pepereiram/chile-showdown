@@ -9,7 +9,7 @@ export type BattleSummary = {
 	log?: string[];
 };
 
-const BASE = 'http://localhost:3001/battles';
+const BASE = 'http://localhost:3001/battles'; // ojo aquí
 
 async function ensureJsonResponse(res: Response, contextMessage = '') {
 	if (!res.ok) {
@@ -39,8 +39,8 @@ function buildFetchOptions(method: string, body?: any) {
 	return opts;
 }
 
-export async function getUserBattles(): Promise<BattleSummary[]> {
-	const res = await fetch(`${BASE}/battles`, buildFetchOptions('GET'));
+export async function getUserBattles(userId:string): Promise<BattleSummary[]> {
+	const res = await fetch(`${BASE}/${encodeURIComponent(userId)}/battles`, buildFetchOptions('GET'));
 
 	await ensureJsonResponse(res, 'Failed to fetch user battles:');
 	return (await res.json()) as BattleSummary[];
@@ -55,29 +55,39 @@ export async function createBattle(userId: string, teamId: string): Promise<Batt
 	return (await res.json()) as BattleSummary;
 }
 
-export async function getBattle(battleId: string): Promise<any> {
-	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}`, buildFetchOptions('GET'));
+export async function getBattle(battleId: string, userId?: string): Promise<any> {
+	const query = userId ? `?userId=${encodeURIComponent(userId)}` : '';
+	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}${query}`, buildFetchOptions('GET'));
 
 	await ensureJsonResponse(res, 'Failed to fetch battle:');
 	return await res.json();
 }
 
-export async function submitMove(battleId: string, moveId: number): Promise<any> {
-	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}/move`, buildFetchOptions('POST', { moveId }));
+export async function submitMove(battleId: string, moveId: number, userId?: string): Promise<any> {
+	const uid = userId ?? localStorage.getItem('userId') ?? undefined;
+	const body: any = { moveId };
+	if (uid) body.userId = uid;
+	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}/move`, buildFetchOptions('POST', body));
 
 	await ensureJsonResponse(res, 'Failed to submit move:');
 	return await res.json();
 }
 
-export async function submitSwitch(battleId: string, toIndex: number): Promise<any> {
-	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}/switch`, buildFetchOptions('POST', { toIndex }));
+export async function submitSwitch(battleId: string, toIndex: number, userId?: string): Promise<any> {
+	const uid = userId ?? localStorage.getItem('userId') ?? undefined;
+	const body: any = { toIndex };
+	if (uid) body.userId = uid;
+	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}/switch`, buildFetchOptions('POST', body));
 
 	await ensureJsonResponse(res, 'Failed to submit switch:');
 	return await res.json();
 }
 
-export async function forfeitBattle(battleId: string): Promise<any> {
-	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}/forfeit`, buildFetchOptions('POST', {}));
+export async function forfeitBattle(battleId: string, userId?: string): Promise<any> {
+	const uid = userId ?? localStorage.getItem('userId') ?? undefined;
+	const body: any = {};
+	if (uid) body.userId = uid;
+	const res = await fetch(`${BASE}/battles/${encodeURIComponent(battleId)}/forfeit`, buildFetchOptions('POST', body));
 
 	await ensureJsonResponse(res, 'Failed to forfeit battle:');
 	return await res.json();

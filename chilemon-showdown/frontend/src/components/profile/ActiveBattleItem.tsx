@@ -1,27 +1,36 @@
-import * as React from 'react';
 import Paper from '@mui/material/Paper';
-import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
-  img?: string;
   title?: string;
+  id?: string | number;
+  isFinished?: boolean;
 }
 
-export default function ActiveBattleItem({ img, title }: Props) {
+export default function ActiveBattleItem({ title, id, isFinished }: Props) {
+  const navigate = useNavigate();
+
+  const handleSelect = () => {
+    if (id !== undefined && id !== null) {
+      navigate(`/battle/${id}`);
+    }
+  };
+
   return (
     <Paper sx={{ p: 2, borderRadius: 2 }} elevation={1}>
       <Typography variant="body2" color="text.secondary">
         {title ?? 'Current Battle: Ash vs. Gary'}
       </Typography>
       <Box sx={{ mt: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Avatar src={img} alt="active" />
         <Box sx={{ flex: 1 }}>
-          <Typography>Xodaa</Typography>
+          <Typography>{title ?? 'Opponent'}</Typography>
         </Box>
-        <Button variant="contained" size="small">Select Move</Button>
+        {!isFinished && (
+          <Button variant="contained" size="small" onClick={handleSelect}>Select Move</Button>
+        )}
       </Box>
     </Paper>
   );

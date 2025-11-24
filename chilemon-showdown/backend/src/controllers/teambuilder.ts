@@ -2,6 +2,18 @@ import express from "express";
 import { authenticate } from "../middleware/authMiddleware";
 import Team from "../models/team";
 import TeamChilemon, { ITeamChilemon } from "../models/teamChilemon";
+import Chilemon from "../models/chilemon";
+
+// Helper: find chilemon name in DB by its numeric id
+async function findChilemonName(id: number): Promise<string | null> {
+  try {
+    const doc = (await Chilemon.findOne({ id })) as any;
+    return doc?.name ?? null;
+  } catch (err) {
+    console.error("Error finding chilemon name:", err);
+    return null;
+  }
+}
 
 const router = express.Router();
 
@@ -58,15 +70,22 @@ router.post("/teams", authenticate, async (req, res) => {
 
     const team = new Team({ userId, name });
     const savedTeam = await team.save();
-    const teamMembers: ITeamChilemon[] = members.map((pokemonId: number, index: number) => ({
-      teamId: savedTeam._id,
-      chilemonId: pokemonId,
-      position: index,
-      nickname: `Pokemon${pokemonId}`,
-      level: 100,
-      moves: [],
-      effort: []
-    }));
+
+    // Ahora members es un array de objetos { pokemonId, moves }
+    const teamMembers: ITeamChilemon[] = await Promise.all(
+      members.map(async (member: { pokemonId: number; moves: number[] }, index: number) => {
+        const nameFromDb = await findChilemonName(member.pokemonId);
+        return {
+          teamId: savedTeam._id,
+          chilemonId: member.pokemonId,
+          position: index,
+          nickname: nameFromDb || `Pokemon${member.pokemonId}`,
+          level: 100,
+          moves: member.moves || [],
+          effort: []
+        } as ITeamChilemon;
+      })
+    );
 
     await TeamChilemon.insertMany(teamMembers);
 
@@ -105,16 +124,20 @@ router.put("/teams/:id", authenticate, async (req, res) => {
 
       await TeamChilemon.deleteMany({ teamId: team._id });
 
-      const teamMembers = members.map((pokemonId: number, index: number) => ({
-        teamId: team._id,
-        chilemonId: pokemonId,
-        position: index,
-        nickname: `Pokemon${pokemonId}`,
-        level: 100,
-        moves: [],
-        effort: []
-      }));
-
+      const teamMembers: ITeamChilemon[] = await Promise.all(
+        members.map(async (member: { pokemonId: number; moves: number[] }, index: number) => {
+          const nameFromDb = await findChilemonName(member.pokemonId);
+          return {
+            teamId: team._id,
+            chilemonId: member.pokemonId,
+            position: index,
+            nickname: nameFromDb || `Pokemon${member.pokemonId}`,
+            level: 100,
+            moves: member.moves || [],
+            effort: []
+          } as ITeamChilemon;
+        })
+      );
       await TeamChilemon.insertMany(teamMembers);
     }
 

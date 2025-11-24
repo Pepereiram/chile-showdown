@@ -1,20 +1,34 @@
-import eggkingImg from "../../assets/HuevitoRey.jpeg";
-import corxeaImg from "../../assets/corxea.jpg";
-import misterionImg from "../../assets/misterion.jpg";
-import papiMickeyImg from "../../assets/papimickey.jpg";
-import vardokImg from "../../assets/vardok.jpg";
-import xodaImg from "../../assets/xoda.jpg";
-
 import Box from '@mui/material/Box';
-import { CardScore, Column, UserName, BattleHistory, ActiveBattleItem } from '../../components/profile';
+import Typography from '@mui/material/Typography';
+import { Column, ActiveBattleItem, UserName } from '../../components/profile';
+import { useEffect } from "react";
+import { useBattleStore } from "../../store/battleStore";
 
 export default function Profile() {
-  const battles = [
-    { name: "Corxea", result: "Victory", img: corxeaImg },
-    { name: "Misterion", result: "Defeat", img: misterionImg },
-    { name: "Egg King", result: "Victory", img: eggkingImg },
-    { name: "Vardok", result: "Defeat", img: vardokImg },
-  ];
+  const user = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user')!)
+    : null;
+  
+  const { 
+    fetchUserBattles, 
+    getActiveBattles,      // in_progress
+    getPendingBattles,     // waiting
+    getFinishedBattles,    // finished
+    loading,
+    error 
+  } = useBattleStore();
+
+  const activeBattles = getActiveBattles();
+  const pendingBattles = getPendingBattles();
+  const finishedBattles = getFinishedBattles();
+  
+  if (!user) {
+    return <Box sx={{ p: 3 }}>Please log in to view your profile.</Box>;
+  }
+
+  useEffect(() => {
+    fetchUserBattles(user.id);
+  }, [user.id, fetchUserBattles]);
 
   return (
     <Box
@@ -27,35 +41,101 @@ export default function Profile() {
         overflow: 'hidden',
       }}
     >
+      {/* Grid externa */}
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+          gridTemplateColumns: { xs: '1fr', md: '1fr 2fr' },
           gap: 3,
           height: '100%',
         }}
       >
+        {/* Perfil usuario */}
         <Box>
           <Column title="User Profile">
-            <UserName name="Papi Mickey" location="Paine" avatarSrc={papiMickeyImg} />
             <Box sx={{ mt: 2 }}>
-              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 }}>
-                <CardScore score={120} tag="Wins" />
-                <CardScore score={69} tag="Losses" />
-              </Box>
+              <UserName name={user.username} />
             </Box>
           </Column>
         </Box>
 
-        <Box>
-          <Column title="Player History">
-            <BattleHistory battles={battles} />
+        {/* Secciones de batallas */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
+            gap: 3,
+          }}
+        >
+          <Column title="Pending Battles">
+            <Box sx={{ mt: 2, display: 'grid', gap: 2 }}>
+              {loading ? (
+                <Typography>Loading...</Typography>
+              ) : error ? (
+                <Typography color="error">{error}</Typography>
+              ) : pendingBattles.length > 0 ? (
+                pendingBattles.map((b) => {
+                  const id = b._id;
+                  const title = b.players?.length
+                    ? b.players.map(p => p.username ?? p.userId).join(' vs ')
+                    : `Battle ${id}`;
+                  return (
+                    <ActiveBattleItem
+                      key={id}
+                      id={id}
+                      title={title + " (Waiting)"}
+                    />
+                  );
+                })
+              ) : (
+                <Typography>No pending battles</Typography>
+              )}
+            </Box>
           </Column>
-        </Box>
 
-        <Box>
-          <Column title="Active Battle">
-            <ActiveBattleItem img={xodaImg} title="Current Battle: Ash vs. Gary" />
+          <Column title="In Progress Battles">
+            <Box sx={{ mt: 2, display: 'grid', gap: 2 }}>
+              {activeBattles.length > 0 ? (
+                activeBattles.map((b) => {
+                  const id = b._id;
+                  const title = b.players?.length
+                    ? b.players.map(p => p.username ?? p.userId).join(' vs ')
+                    : `Battle ${id}`;
+                  return (
+                    <ActiveBattleItem
+                      key={id}
+                      id={id}
+                      title={title}
+                    />
+                  );
+                })
+              ) : (
+                <Typography>No active battles</Typography>
+              )}
+            </Box>
+          </Column>
+
+          <Column title="Finished Battles">
+            <Box sx={{ mt: 2, display: 'grid', gap: 2 }}>
+              {finishedBattles.length > 0 ? (
+                finishedBattles.map((b) => {
+                  const id = b._id;
+                  const title = b.players?.length
+                    ? b.players.map(p => p.username ?? p.userId).join(' vs ')
+                    : `Battle ${id}`;
+                  return (
+                    <ActiveBattleItem
+                      key={id}
+                      id={id}
+                      title={title}
+                      isFinished={true}
+                    />
+                  );
+                })
+              ) : (
+                <Typography>No finished battles</Typography>
+              )}
+            </Box>
           </Column>
         </Box>
       </Box>

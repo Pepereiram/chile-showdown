@@ -3,7 +3,7 @@ dotenv.config();
 
 export const ENV = process.env.NODE_ENV ?? "development";
 
-export const PORT = Number(process.env.PORT ?? 3001);
+export const PORT = Number(process.env.PORT ?? 7142);
 export const HOST = process.env.HOST ?? "localhost";
 
 export const JWT_SECRET = process.env.JWT_SECRET ?? "my_secret";
