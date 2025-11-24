@@ -21,7 +21,6 @@ import {
   DialogActions,
 } from "@mui/material";
 import { getMoveNameById } from "../../services/moves";
-import { getChilemonSpriteUrl } from "../../utils/chilemonMapping";
 
 type BattlePlayer = {
   userId: string;
@@ -288,7 +287,6 @@ export const Battle: React.FC = () => {
             {/* Sprite image for opponent (uses chilemon id) */}
             <Avatar
               variant="circular"
-              src={oppActive?.id ? getChilemonSpriteUrl(oppActive.id) : undefined}
               alt={oppActive?.name ?? "opponent"}
               sx={{ width: 96, height: 96, bgcolor: "grey.200" }}
             />
@@ -302,7 +300,6 @@ export const Battle: React.FC = () => {
             {/* Sprite image for player (uses chilemon id) */}
             <Avatar
               variant="circular"
-              src={myActive?.id ? getChilemonSpriteUrl(myActive.id) : undefined}
               alt={myActive?.name ?? "you"}
               sx={{ width: 96, height: 96, bgcolor: "grey.200" }}
             />
