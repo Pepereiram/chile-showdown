@@ -47,6 +47,7 @@ Se definen tres stores principales para manejar los estados de las batallas: pen
  │     ├── /battles/:id/move    (GET)     - Obtener todos los equipos del usuario
  │     ├── /battles/:id/switch  (GET)     - Obtener todos los equipos del usuario
  │     └── /battles/:id/forfeit (GET)     - Obtener todos los equipos del usuario
+
  ```
 
 ### Flujo de autenticación
@@ -54,11 +55,11 @@ Se definen tres stores principales para manejar los estados de las batallas: pen
 
 ## Testing E2E
 
-## Herramienta usada
+### Herramienta usada
 
 La herramienta utilizada para el testing End-to-End es Playwright. Los tests están organizados en el directorio e2e-tests y se configuran mediante playwright.config.ts. El código de prueba se escribe usando la API de test y expect de Playwright.
 
-## Flujos cubierto
+### Flujos cubierto
 
 Los tests E2E cubren los principales flujos de la gestión de equipos (Team Builder), que representan las operaciones CRUD (Create, Read, Update, Delete).
 
