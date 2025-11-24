@@ -304,7 +304,7 @@ const TeamBuilder: React.FC = () => {
               <Typography variant="body2">No tienes equipos creados</Typography>
             </Box>
           ) : (
-            existingTeams.map((team, idex) => (
+            existingTeams.map((team) => (
               <Paper
                 key={team.id}
                 elevation={0}

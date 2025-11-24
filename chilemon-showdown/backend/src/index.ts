@@ -11,8 +11,10 @@ declare global {
     }
 }
 
+const port = process.env.NODE_ENV === 'development'? 3001 : PORT;
+
 connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
   });
 });
