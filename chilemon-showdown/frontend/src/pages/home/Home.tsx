@@ -36,7 +36,7 @@ export default function Home() {
 
         // Equipos del usuario autenticado (el backend usa la cookie, no userId)
         const teamsRes = await axios.get<Team[]>(
-          `http://localhost:3001/api/teams`,
+          `/api/teams`,
           auth
         );
 
@@ -46,7 +46,7 @@ export default function Home() {
         const teamsWithMembers: TeamView[] = await Promise.all(
           teamsCargados.map(async (t) => {
             const membersRes = await axios.get<TeamChilemon[]>(
-              `http://localhost:3001/api/teamChilemon`,
+              `/api/teamChilemon`,
               { params: { teamId: t.id }, ...auth }
             );
 

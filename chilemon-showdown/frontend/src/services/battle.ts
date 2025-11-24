@@ -9,7 +9,7 @@ export type BattleSummary = {
 	log?: string[];
 };
 
-const BASE = 'http://localhost:3001/battles'; // ojo aquí
+const BASE = '/battles'; // ojo aquí
 
 async function ensureJsonResponse(res: Response, contextMessage = '') {
 	if (!res.ok) {

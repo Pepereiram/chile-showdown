@@ -62,7 +62,7 @@ const TeamBuilder: React.FC = () => {
 
   const loadAvailableChilemon = useCallback(async () => {
     try {
-      const response = await axios.get<Chilemon[]>("http://localhost:3001/chilemon");
+      const response = await axios.get<Chilemon[]>("/chilemon");
       const players: PlayerDisplay[] = response.data.map(chilemon => ({
         id: chilemon.id,
         name: chilemon.name,
@@ -82,16 +82,16 @@ const TeamBuilder: React.FC = () => {
       const user = storedUser ? JSON.parse(storedUser) : null;
 
       if (!user) return;
-      const teamsRes = await axios.get(`http://localhost:3001/api/teams`, auth());
+      const teamsRes = await axios.get(`/api/teams`, auth());
 
       const teamsWithMembers = await Promise.all(
         teamsRes.data.map(async (team: any) => {
-          const membersRes = await axios.get(`http://localhost:3001/api/teamChilemon`, {
+          const membersRes = await axios.get(`/api/teamChilemon`, {
             params: { teamId: team.id },
             ...auth(),
           });
 
-          const chilemonRes = await axios.get<Chilemon[]>("http://localhost:3001/chilemon");
+          const chilemonRes = await axios.get<Chilemon[]>("/chilemon");
 
           const members = membersRes.data.map((m: any) => {
             const chilemon = chilemonRes.data.find(c => c.id === m.chilemonId);
@@ -169,7 +169,7 @@ const TeamBuilder: React.FC = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:3001/api/teams/${teamId}`, auth());
+      await axios.delete(`/api/teams/${teamId}`, auth());
       setExistingTeams(prev => prev.filter(t => t.id !== teamId));
       if (activeTeamId === teamId) {
         handleNewTeam();
@@ -208,13 +208,13 @@ const TeamBuilder: React.FC = () => {
       }));
 
       if (activeTeamId) {
-        await axios.put(`http://localhost:3001/api/teams/${activeTeamId}`, {
+        await axios.put(`/api/teams/${activeTeamId}`, {
           name: teamName,
           members: membersData  
         }, auth());
         window.alert("¡Equipo actualizado exitosamente!");
       } else {
-        await axios.post("http://localhost:3001/api/teams", {
+        await axios.post("/api/teams", {
           name: teamName,
           members: membersData  
         }, auth());

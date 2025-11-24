@@ -3,8 +3,8 @@ import {login} from './helpers';
 
 test.describe('Create Chilemon Team', () => {
     test.beforeEach(async ({page, request}) => {
-        await request.post('http://localhost:3001/api/tests/reset');
-        await request.post('http://localhost:3001/api/users',
+        await request.post('/api/tests/reset');
+        await request.post('/api/users',
             {data: {username: 'user', password: 'password'}}
         );
         await page.goto('/');
