@@ -32,8 +32,7 @@ const router = express.Router()
 // Obtener la batalla correspondiente por ID
 router.get("/battles/:id", async (req, res) => {
     // Allow userId to come from query string, body (for clients that send it), or a header
-    const userId = req.userId;
-    //const userId = (req.query.userId as string) || req.body?.userId || req.headers["x-user-id"] || (req as any).user?.id;
+    const userId = (req.query.userId as string) || req.body?.userId || req.headers["x-user-id"] || (req as any).user?.id;
     console.log("Fetching battle for userId:", userId, "and battleId:", req.params.id);
 
     if (!userId) {

@@ -30,8 +30,8 @@ export const authenticate: RequestHandler = (req, res, next) => {
       decoded.csrf &&
       csrfHeader === decoded.csrf
     ) {
-      
-      req.userId = decoded.id;
+      // attach user info to the request
+      (req as any).userId = decoded.id;
       return next();
     }
 
