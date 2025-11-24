@@ -122,6 +122,7 @@ const LoginRegister: React.FC = () => {
         >
           <TextField
             placeholder="Username"
+            name="username"
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -131,6 +132,7 @@ const LoginRegister: React.FC = () => {
           <TextField
             placeholder="Password"
             type="password"
+            name="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}

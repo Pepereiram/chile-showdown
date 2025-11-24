@@ -304,11 +304,13 @@ const TeamBuilder: React.FC = () => {
               <Typography variant="body2">No tienes equipos creados</Typography>
             </Box>
           ) : (
-            existingTeams.map(team => (
+            existingTeams.map((team, idex) => (
               <Paper
                 key={team.id}
                 elevation={0}
                 onClick={() => handleSelectTeam(team)}
+                className="team-sidebar-item"
+                data-team-name={team.name}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -326,7 +328,7 @@ const TeamBuilder: React.FC = () => {
                     borderColor: "#1a73e8",
                   },
                 }}
-              >
+                >
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography 
                     variant="body2" 
@@ -347,6 +349,7 @@ const TeamBuilder: React.FC = () => {
                 <IconButton
                   size="small"
                   onClick={(e) => handleDeleteTeam(team.id, e)}
+                  className="delete-sidebar-button"
                   sx={{
                     ml: 1,
                     color: "#d32f2f",
@@ -418,6 +421,8 @@ const TeamBuilder: React.FC = () => {
         >
           <TextField
             fullWidth
+            className="team-name-input"
+            name="team-name-input"
             value={teamName}
             onChange={e => setTeamName(e.target.value)}
             placeholder="Nombre del Equipo"
@@ -434,6 +439,7 @@ const TeamBuilder: React.FC = () => {
           <Button
             variant="contained"
             onClick={handleSaveTeam}
+            className="save-button"
             startIcon={<SaveIcon />}
             sx={{
               minWidth: 120,
@@ -475,6 +481,7 @@ const TeamBuilder: React.FC = () => {
           {teamSlots.map((player, index) => (
             <Paper
               key={index}
+              className="team-slot"
               elevation={0}
               sx={{
                 position: "relative",
@@ -499,6 +506,7 @@ const TeamBuilder: React.FC = () => {
                   <Avatar
                     src={player.avatar}
                     alt={player.name}
+                    imgProps={{ className: 'slot-avatar' }}
                     sx={{
                       width: 80,
                       height: 80,
@@ -508,6 +516,7 @@ const TeamBuilder: React.FC = () => {
                   />
                   <Typography
                     variant="body1"
+                    className="slot-name"
                     sx={{
                       fontWeight: 700,
                       textAlign: "center",
@@ -519,6 +528,7 @@ const TeamBuilder: React.FC = () => {
                   <IconButton
                     size="small"
                     onClick={() => handleRemovePlayer(player.id)}
+                    className="slot-remove"
                     sx={{
                       position: "absolute",
                       top: 8,
@@ -606,6 +616,7 @@ const TeamBuilder: React.FC = () => {
                 key={player.id}
                 elevation={0}
                 onClick={() => !isSelected && handleAddPlayer(player)}
+                className={`available-card ${isSelected ? ' selected' : ''}`}
                 sx={{
                   position: "relative",
                   bgcolor: isSelected ? "#f5f5f5" : "white",
