@@ -7,6 +7,7 @@
     "dev": "ts-node-dev --respawn src/index.ts",
     "build": "tsc",
     "seed": "node src/utils/seedChilemon.ts",
+    "seed:dev": "npx ts-node src/utils/seedChilemon.ts",
     "start": "node dist/index.js",
     "clean": "rimraf dist",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend"
