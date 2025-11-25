@@ -5,7 +5,6 @@ import * as fs from "fs";
 import * as path from "path";
 
 async function seedChilemon() {
-  await connectDB();
 
   const count = await Chilemon.countDocuments();
   if (count > 0) {
@@ -28,7 +27,6 @@ async function seedChilemon() {
 }
 
 async function seedMoves() {
-  await connectDB();
 
   // If you want to skip when already seeded:
   const count = await Move.countDocuments();

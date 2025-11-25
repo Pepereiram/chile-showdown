@@ -20,6 +20,7 @@ backend/dist
 
 # Local environment files
 *.local
+.env
 
 # Editor directories and files
 .vscode/*
