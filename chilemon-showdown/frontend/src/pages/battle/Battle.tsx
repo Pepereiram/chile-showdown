@@ -360,14 +360,19 @@ export const Battle: React.FC = () => {
 
               {selectedPanel === "switch" && me && (
                 <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 1 }}>
-                  {me.team.map((slot, idx) => (
-                    <Box key={idx}>
-                      <Button fullWidth variant="contained" color="success" size="small" disabled={submitting || idx === me.activeIndex} onClick={() => handleSwitchClick(idx)}>
-                        {slot.nickname || `Slot ${idx + 1}`}
-                      </Button>
-                    </Box>
-                  ))}
-                </Box>
+                  {me.team.map((slot, idx) => {
+                    const partyChilemonState = me.partyState.find(ps => ps.refTeamIndex === idx);
+                    const isKO = partyChilemonState ? (partyChilemonState.currentHP <= 0) : false;
+                    return (
+                      <Box key={idx}>
+                        <Button fullWidth variant="contained" color="primary" size="small" disabled={submitting || me.activeIndex === idx || isKO}
+                        onClick={() => handleSwitchClick(idx)}>
+                          {slot.nickname || 'Slot ${idx + 1}'}
+                        </Button>
+                      </Box>
+                    );
+                  })}
+                  </Box>
               )}
 
               {error && (
