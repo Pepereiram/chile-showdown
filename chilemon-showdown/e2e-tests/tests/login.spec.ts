@@ -24,7 +24,7 @@ test.describe('Login tests', () => {
 
         // Usamos `page.request` que comparte las cookies del contexto del navegador para llamar a la API protegida
         const authRes = await page.request.get('/api/teams');
-        //expect(authRes.status()).toBe(200);
+        expect(authRes.status()).toBe(200);
     });
 
 });
