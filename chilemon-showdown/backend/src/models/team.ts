@@ -22,5 +22,5 @@ const teamSchema = new Schema<ITeam>(
   }
 );
 
-const Team = mongoose.model("Team", teamSchema);
+const Team = mongoose.model("ChilemonTeam", teamSchema);
 export default Team;

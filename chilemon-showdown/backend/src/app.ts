@@ -10,7 +10,7 @@ import testingRouter from "./controllers/testing";
 import battleRouter from "./controllers/battle";
 
 const ALLOWED_ORIGINS = [
-  "http://localhost:5173",
+  `http://${process.env.HOST}:${process.env.PORT}`,
 ];
 
 const app = express();
@@ -18,6 +18,7 @@ const app = express();
 app.use(express.static("dist"));
 app.use(express.json());
 app.use(cookieParser()); 
+app.use(cors());
 app.use(requestLogger);
 
 // ... routes ...
@@ -34,6 +35,18 @@ app.use("/battles", battleRouter);
 if (process.env.NODE_ENV === "test") {
   app.use("/api/testing", testingRouter);
 }
+
+app.get("*", (req, res, next) => {
+  if (req.method !== "GET") return next();
+  const accept = req.headers.accept || "";
+  if (!accept.includes("text/html")) return next();
+  const p = req.path || "";
+  if (p.startsWith("/api") || p.startsWith("/chilemon") || p.startsWith("/battles")) return next();
+  const indexPath = path.resolve(process.cwd(), "dist", "index.html");
+  res.sendFile(indexPath, (err) => {
+    if (err) next();
+  });
+});
 
 // 404
 app.use(unknownEndpoint);

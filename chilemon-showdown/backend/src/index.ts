@@ -1,6 +1,6 @@
 import app from "./app";
 import { connectDB } from "./utils/db";
-import { PORT } from "./utils/config";
+import { HOST, PORT } from "./utils/config";
 
 
 declare global {
@@ -11,10 +11,10 @@ declare global {
     }
 }
 
-const port = process.env.NODE_ENV === 'development'? 3001 : PORT;
+const HOST1 = HOST || "localhost";
 
 connectDB().then(() => {
-  app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+  app.listen(Number(PORT), HOST1, () => {
+    console.log(`Server running on http://${HOST1}:${PORT}`);
   });
 });

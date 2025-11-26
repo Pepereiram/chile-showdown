@@ -12,11 +12,12 @@
     "start": "node dist/index.js",
     "clean": "rimraf dist",
     "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
-    "build:uiw": "if exist dist rmdir /s /q dist && cd ../frontend && npm run build && xcopy dist ..\\backend\\dist /e /i /y"
+    "build:uiw": "cd ../frontend && npm run build && xcopy dist ..\\backend\\dist /e /i /y"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
