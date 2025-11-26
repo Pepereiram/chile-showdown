@@ -14,7 +14,7 @@ declare global {
 const HOST1 = HOST || "localhost";
 
 connectDB().then(() => {
-  app.listen(Number(PORT), HOST1, () => {
-    console.log(`Server running on http://${HOST1}:${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`Server running on https://fullstack.dcc.uchile.cl:${PORT}`);
   });
 });
