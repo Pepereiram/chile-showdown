@@ -15,7 +15,6 @@ const router = express.Router();
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
 
-  // 👇 como password tiene select:false, hay que incluirlo
   const user = await User.findOne({ username }).select("+password");
   if (!user) return res.status(401).json({ error: "invalid username or password" });
 

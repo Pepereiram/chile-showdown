@@ -1,13 +1,14 @@
 import bcrypt from "bcrypt";
 import express from "express";
 import User from "../models/users";
+import { authenticate } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
 /**
  * Get all users
  */
-router.get("/", async (request, response) => {
+router.get("/", authenticate, async (request, response) => {
   const users = await User.find({});
   response.json(users);
 });

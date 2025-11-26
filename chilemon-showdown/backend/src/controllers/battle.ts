@@ -30,7 +30,7 @@ function makePlayer(userId: Types.ObjectId, username: string, team: ITeamChilemo
 const router = express.Router()
 
 // Obtener la batalla correspondiente por ID
-router.get("/battles/:id", async (req, res) => {
+router.get("/battles/:id", authenticate, async (req, res) => {
     // Allow userId to come from query string, body (for clients that send it), or a header
     const userId = (req.query.userId as string) || req.body?.userId || req.headers["x-user-id"] || (req as any).user?.id;
     console.log("Fetching battle for userId:", userId, "and battleId:", req.params.id);
@@ -49,7 +49,7 @@ router.get("/battles/:id", async (req, res) => {
     res.json(battle);
 });
 
-router.get("/:userId/battles", async (req, res) => {
+router.get("/:userId/battles", authenticate, async (req, res) => {
     const {userId} = req.params;
     if (!userId) {
         return res.status(400).json({ error: "userId es requerido" });
@@ -64,7 +64,7 @@ router.get("/:userId/battles", async (req, res) => {
 });
 
 // Crear instancia de la batalla
-router.post("/battles", async (req, res) => { // IMPORTANTE: AGREGAR AUTENTICACIÓN
+router.post("/battles", authenticate, async (req, res) => { // IMPORTANTE: AGREGAR AUTENTICACIÓN
     const {userId, teamId} = req.body;
     const user = await User.findById(userId);
     const teamSelected = teamId // Desde el frontEnd pasar la id del equipo seleccionado
@@ -122,7 +122,7 @@ router.post("/battles", async (req, res) => { // IMPORTANTE: AGREGAR AUTENTICACI
     return res.status(201).json(battle);
 })
 
-router.post("/battles/:id/move", async (req, res) => {
+router.post("/battles/:id/move", authenticate, async (req, res) => {
     const {userId, moveId} = req.body;
     const battle = await Battle.findById(req.params.id).exec();
     if (!battle) return res.status(404).json({ error: "Battle not found" });
@@ -143,7 +143,7 @@ router.post("/battles/:id/move", async (req, res) => {
     return res.json(battle);
 })
 
-router.post("/battles/:id/switch", async (req, res) => {
+router.post("/battles/:id/switch", authenticate, async (req, res) => {
     const {userId, toIndex} = req.body;
 
     const battle = await Battle.findById(req.params.id).exec();
@@ -166,7 +166,7 @@ router.post("/battles/:id/switch", async (req, res) => {
 })
 
 
-router.post("/battles/:id/forfeit", async (req, res) => {
+router.post("/battles/:id/forfeit", authenticate, async (req, res) => {
     const {userId} = req.body;
     const battle = await Battle.findById(req.params.id).exec();
     if (!battle) return res.status(404).json({ error: "Battle not found" });
