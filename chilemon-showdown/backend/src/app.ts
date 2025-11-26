@@ -8,6 +8,7 @@ import teambuilderRouter from "./controllers/teambuilder";
 import chilemonRouter from "./controllers/chilemon";
 import testingRouter from "./controllers/testing";
 import battleRouter from "./controllers/battle";
+import path from "path";
 
 const ALLOWED_ORIGINS = [
   `http://${process.env.HOST}:${process.env.PORT}`,
