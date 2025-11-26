@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import type { LoginData } from "../../types/Login";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 import {
   Container,
@@ -12,7 +11,6 @@ import {
   Box,
 } from "@mui/material";
 
-type LoginResponse = { id: string, username: string };
 
 const LoginRegister: React.FC = () => {
   const [login, setLogin] = useState("Login");
@@ -20,6 +18,7 @@ const LoginRegister: React.FC = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const auth = useAuth();
 
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -27,24 +26,13 @@ const LoginRegister: React.FC = () => {
     setError("");
 
     try {
-      const res = await axios.post<LoginResponse>(
-        "/api/login",
-        { username, password },
-        { withCredentials: true }
-      );
-
-      const csrf = res.headers["x-csrf-token"];
-      if (csrf) {
-        localStorage.setItem("csrf", csrf);
-      }
-      localStorage.setItem("user", JSON.stringify({ id: res.data.id, username: res.data.username }));
+      await auth.handleLogin(username, password);
       setError("");
       navigate("/home");
     } catch (err: any) {
-      const msg =
-        err?.response?.status === 401
-          ? "Usuario o contraseña incorrectos."
-          : "Error de conexión.";
+      const msg = err?.message === "Error al iniciar sesión" || err?.message === "Error en el login"
+        ? "Usuario o contraseña incorrectos."
+        : (err?.message || "Error de conexión.");
       setError(msg);
     } finally {
       setUsername("");
@@ -57,26 +45,12 @@ const LoginRegister: React.FC = () => {
     setError("");
 
     try {
-      const { data } = await axios.get<LoginData[]>(
-        "/api/users",
-        { params: { username } }
-      );
-
-      const exists = data.some((u) => u.username === username);
-      if (exists) {
-        setError("El usuario ya existe.");
-        return;
-      }
-
-      await axios.post("/api/users", {
-        username,
-        password,
-      });
-
+      await auth.handleRegister(username, password);
       alert("¡Registro exitoso!");
       setLogin("Login");
-    } catch {
-      setError("Error de conexión.");
+    } catch (err: any) {
+      const msg = err?.message === "Usuario ya existe" ? "El usuario ya existe." : (err?.message || "Error de conexión.");
+      setError(msg);
     }
 
     setUsername("");
